@@ -38,7 +38,7 @@ messages:
 
 discord:
   enabled: false
-  webhook_url: ""
+  webhook_url: "YOUR_WEBHOOK_URL"
   username: "ShadowCrest Logs"
   send:
     warn: true
