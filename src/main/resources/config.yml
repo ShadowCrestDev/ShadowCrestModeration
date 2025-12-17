@@ -1,0 +1,98 @@
+prefix: "&8[&5ShadowCrest&8] &r"
+
+messages:
+  no_permission: "{prefix}&cDazu hast du keine Rechte."
+  player_not_found: "{prefix}&cSpieler nicht gefunden oder war noch nie online."
+  invalid_ip: "{prefix}&cUngültige IP-Adresse."
+  reason_required: "{prefix}&cDu musst einen Grund angeben!"
+  duration_required: "{prefix}&cDu musst eine Dauer angeben! Beispiel: 24h, 30m, 7d"
+  invalid_duration: "{prefix}&cUngültige Dauer! Nutze z.B. 30m, 24h, 7d."
+
+  scm_usage: "{prefix}&cNutze: /scm reload &7oder &f/scm info"
+  scm_info: "{prefix}&7Version: &f{version} &8| &7Discord: &f{discord}"
+
+
+  warn_given: "{prefix}&e{player} &7wurde gewarnt. &7Grund: &f{reason} &8(&7Warns: &f{warns}&8)"
+  warned_screen: "&cDu wurdest verwarnt!\n&7Grund: &f{reason}\n&7Warns: &f{warns}"
+
+  kick_screen: "&cDu wurdest gekickt von ShadowCrest!\n&7Grund: &f{reason}"
+  ban_screen: "&cDu wurdest permanent gebannt von ShadowCrest!\n&7Grund: &f{reason}"
+  tempban_screen: "&cDu wurdest gebannt von ShadowCrest!\n&7Dauer: &f{duration}\n&7Grund: &f{reason}"
+  ipban_screen: "&cDeine IP wurde gebannt von ShadowCrest!\n&7Grund: &f{reason}"
+
+  unban_usage: "{prefix}&cNutze: /unban <spieler>"
+  unban_done: "{prefix}&a{player} wurde entbannt."
+  unban_not_banned: "{prefix}&e{player} &7ist nicht gebannt."
+
+  unipban_usage: "{prefix}&cNutze: /unipban <ip>"
+  unipban_done: "{prefix}&aIP &f{ip} &awurde entbannt."
+  unipban_not_banned: "{prefix}&eIP &f{ip} &7ist nicht gebannt."
+
+  clearwarns_usage: "{prefix}&cNutze: /clearwarns <spieler>"
+  clearwarns_done: "{prefix}&aAlle Verwarnungen von &f{player} &awurden gelöscht."
+
+  warns_usage: "{prefix}&cNutze: /warns <spieler>"
+  warns_header: "{prefix}&7Warns von &f{player}&7: &f{warns}"
+  warns_empty: "{prefix}&7Keine Verwarnungen vorhanden."
+  warns_entry: " &8- &f{date} &7| &f{reason}"
+
+discord:
+  enabled: false
+  webhook_url: ""
+  username: "ShadowCrest Logs"
+  send:
+    warn: true
+    kick: true
+    ban: true
+    tempban: true
+    ipban: true
+    unban: true
+    unipban: true
+    clearwarns: true
+
+
+
+
+
+  staff_action:
+    warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"
+    kick: "{prefix}&7[&cKICK&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    ban: "{prefix}&7[&4BAN&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    tempban: "{prefix}&7[&4TEMPBAN&7] &f{staff} &7-> &f{player} &7| &f{duration} &7| &f{reason}"
+    ipban: "{prefix}&7[&4IPBAN&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    unban: "{prefix}&7[&aUNBAN&7] &f{staff} &7-> &f{player}"
+    unipban: "{prefix}&7[&aUNIPBAN&7] &f{staff} &7-> &f{ip}"
+    clearwarns: "{prefix}&7[&bCLEARWARNS&7] &f{staff} &7-> &f{player} &8(&f{oldwarns}&8)"
+
+
+
+
+  join_log:
+    enabled: true
+    # {warn_list} wird unten gebaut; {warns}, {player} etc. auch
+    format: |
+      &8&m--------------------------------
+      &5Join-Log: &f{player}
+      &7Warns: &f{warns}
+      &7Letzte Warns:
+      {warn_list}
+      &8&m--------------------------------
+  warn_list_format: " &8- &f{date} &7| &f{reason}"
+  warn_list_empty: " &8- &7Keine"
+
+warn_settings:
+  # Wird NUR ausgelöst, wenn warns == <warns> erreicht wird (exakt).
+  # action: TEMPBAN oder BAN
+  actions:
+    - warns: 3
+      action: TEMPBAN
+      duration: "24h"
+      reason: "Zu viele Verwarnungen"
+    - warns: 5
+      action: BAN
+      reason: "Maximale Verwarnungen erreicht"
+
+storage:
+  per_player_file: true
+  max_warn_list_on_join: 5
+

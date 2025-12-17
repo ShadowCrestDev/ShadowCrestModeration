@@ -1,0 +1,57 @@
+name: ShadowCrestModeration
+version: 1.0.0
+main: de.shadowcrest.mod.ShadowCrestMod
+api-version: "1.21"
+commands:
+  warn:
+    usage: /warn <spieler> <grund...>
+  kick:
+    usage: /kick <spieler> <grund...>
+  ban:
+    usage: /ban <spieler> <grund...>
+  tempban:
+    usage: /tempban <spieler> <dauer> <grund...>
+  ipban:
+    usage: /ipban <spieler|ip> <grund...>
+  scm:
+    usage: /scm <reload|info>
+  unban:
+    usage: /unban <spieler>
+  unipban:
+    usage: /unipban <ip>
+  clearwarns:
+    usage: /clearwarns <spieler>
+  warns:
+    usage: /warns <spieler>
+
+
+
+
+
+
+permissions:
+  shadowcrest.mod.warn:
+    default: op
+  shadowcrest.mod.kick:
+    default: op
+  shadowcrest.mod.ban:
+    default: op
+  shadowcrest.mod.tempban:
+    default: op
+  shadowcrest.mod.ipban:
+    default: op
+  shadowcrest.mod.notify:
+    default: op
+  shadowcrest.mod.info:
+    default: op
+  shadowcrest.mod.unban:
+    default: op
+  shadowcrest.mod.unipban:
+    default: op
+  shadowcrest.mod.clearwarns:
+    default: op
+  shadowcrest.mod.warns:
+    default: op
+
+
+
