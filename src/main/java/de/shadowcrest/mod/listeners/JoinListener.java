@@ -1,6 +1,7 @@
 package de.shadowcrest.mod.listeners;
 
 import de.shadowcrest.mod.ShadowCrestMod;
+import de.shadowcrest.mod.data.PlaytimeUtil;
 import de.shadowcrest.mod.data.PlayerData;
 import de.shadowcrest.mod.data.PlayerDataManager;
 import de.shadowcrest.mod.util.MessageUtil;
@@ -63,6 +64,16 @@ public class JoinListener implements Listener {
                     .replace("{player}", p.getName())
                     .replace("{warns}", String.valueOf(data.getWarns()))
                     .replace("{warn_list}", warnList);
+
+            boolean showPlaytime = plugin.getConfig().getBoolean("playtime.show_in_join_log", true);
+            if (showPlaytime) {
+                long ticks = PlaytimeUtil.getPlayTicks(p);
+                String fmt = plugin.getConfig().getString("playtime.format", "{days}d {hours}h {minutes}m");
+                String playtime = PlaytimeUtil.formatPlaytime(ticks, fmt);
+                formatted = formatted.replace("{playtime}", playtime);
+            } else {
+                formatted = formatted.replace("{playtime}", "");
+            }
 
             String colored = MessageUtil.color(formatted);
             String[] lines = colored.split("\\r?\\n");

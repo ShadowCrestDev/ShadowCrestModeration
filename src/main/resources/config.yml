@@ -36,6 +36,16 @@ messages:
   warns_empty: "{prefix}&7Keine Verwarnungen vorhanden."
   warns_entry: " &8- &f{date} &7| &f{reason}"
 
+  console_only: "{prefix}&cDieser Befehl kann nur in der Konsole benutzt werden."
+  ip_usage: "{prefix}&cUsage: ip <spieler>"
+  ip_result: "{prefix}&7IP von &f{player}&7: &c{ip}"
+
+  playtime_usage: "{prefix}&cNutze: /playtime <spieler>"
+  playtime_result: "{prefix}&7Spielzeit von &f{player}&7: &a{playtime}"
+  playtime_disabled: "{prefix}&cPlaytime ist deaktiviert."
+
+
+
 
   staff_action:
     warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"
@@ -51,12 +61,11 @@ messages:
 
 
   join_log:
-    enabled: true
-    # {warn_list} wird unten gebaut; {warns}, {player} etc. auch
     format: |
       &8&m--------------------------------
       &5Join-Log: &f{player}
       &7Warns: &f{warns}
+      &7Spielzeit: &f{playtime}
       &7Letzte Warns:
       {warn_list}
       &8&m--------------------------------
@@ -78,4 +87,10 @@ warn_settings:
 storage:
   per_player_file: true
   max_warn_list_on_join: 5
+
+playtime:
+  enabled: true
+  show_in_join_log: true
+  # Anzeigeformat (Platzhalter: {days} {hours} {minutes})
+  format: "{days}d {hours}h {minutes}m"
 
