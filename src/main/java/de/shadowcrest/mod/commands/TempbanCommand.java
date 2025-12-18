@@ -26,11 +26,7 @@ public class TempbanCommand implements CommandExecutor {
         }
 
         if (args.length < 3) {
-            // optional besser: messages.tempban_usage (sonst duration_required)
-            String usage = MessageUtil.msg(plugin, "messages.tempban_usage");
-            sender.sendMessage(usage == null || usage.isBlank()
-                    ? MessageUtil.msg(plugin, "messages.duration_required")
-                    : usage);
+            sender.sendMessage(MessageUtil.msg(plugin, "messages.duration_required"));
             return true;
         }
 
@@ -50,28 +46,17 @@ public class TempbanCommand implements CommandExecutor {
         }
 
         Date until = new Date(System.currentTimeMillis() + ms);
-
         Player online = Bukkit.getPlayerExact(targetName);
 
-        // Tempban immer nach Namen erlauben (auch wenn Spieler nie online war)
         Bukkit.getBanList(BanList.Type.NAME).addBan(targetName, reason, until, "ShadowCrest");
 
         String staff = sender.getName();
-
-        // Staff message einmal bauen
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.tempban",
                 MessageUtil.ph("staff", staff, "player", targetName, "duration", durationStr, "reason", reason)
         );
-
-        // Ingame Staff-Log
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
-
-        // Discord Webhook
-        if (plugin.getConfig().getBoolean("discord.send.tempban", true)) {
-            de.shadowcrest.mod.util.DiscordNotifier.notify(plugin, staffMessage);
-        }
 
         if (online != null) {
             String screen = MessageUtil.format(

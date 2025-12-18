@@ -4,9 +4,7 @@ import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 
 public class UnbanCommand implements CommandExecutor {
 
@@ -29,7 +27,6 @@ public class UnbanCommand implements CommandExecutor {
         }
 
         String targetName = args[0];
-
         BanList banList = Bukkit.getBanList(BanList.Type.NAME);
 
         if (banList.getBanEntry(targetName) == null) {
@@ -44,23 +41,13 @@ public class UnbanCommand implements CommandExecutor {
         banList.pardon(targetName);
 
         String staff = sender.getName();
-
-        // Staff message einmal bauen
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.unban",
                 MessageUtil.ph("staff", staff, "player", targetName)
         );
-
-        // Ingame Staff-Log
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
 
-        // Discord Webhook
-        if (plugin.getConfig().getBoolean("discord.send.unban", true)) {
-            de.shadowcrest.mod.util.DiscordNotifier.notify(plugin, staffMessage);
-        }
-
-        // Sender confirmation
         sender.sendMessage(MessageUtil.format(
                 plugin,
                 "messages.unban_done",

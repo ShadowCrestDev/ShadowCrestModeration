@@ -36,23 +36,6 @@ messages:
   warns_empty: "{prefix}&7Keine Verwarnungen vorhanden."
   warns_entry: " &8- &f{date} &7| &f{reason}"
 
-discord:
-  enabled: false
-  webhook_url: "YOUR_WEBHOOK_URL"
-  username: "ShadowCrest Logs"
-  send:
-    warn: true
-    kick: true
-    ban: true
-    tempban: true
-    ipban: true
-    unban: true
-    unipban: true
-    clearwarns: true
-
-
-
-
 
   staff_action:
     warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"

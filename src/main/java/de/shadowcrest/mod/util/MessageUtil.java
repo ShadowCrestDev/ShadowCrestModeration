@@ -62,11 +62,16 @@ public final class MessageUtil {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(raw);
     }
 
+    // ✅ Multiline-sicherer Staff-Broadcast
     public static void broadcastToStaff(String permission, String message) {
         String colored = color(message);
+        String[] lines = colored.split("\\r?\\n");
+
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission(permission)) {
-                p.sendMessage(colored);
+                for (String line : lines) {
+                    if (!line.isBlank()) p.sendMessage(line);
+                }
             }
         }
     }

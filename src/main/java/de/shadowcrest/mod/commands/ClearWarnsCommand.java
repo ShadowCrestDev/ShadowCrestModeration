@@ -5,9 +5,7 @@ import de.shadowcrest.mod.data.PlayerData;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 
 import java.util.UUID;
 
@@ -49,23 +47,13 @@ public class ClearWarnsCommand implements CommandExecutor {
         plugin.getDataManager().save(data);
 
         String staff = sender.getName();
-
-        // Staff message einmal bauen
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.clearwarns",
                 MessageUtil.ph("staff", staff, "player", targetName, "oldwarns", oldWarns)
         );
-
-        // Ingame Staff-Log
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
 
-        // Discord Webhook
-        if (plugin.getConfig().getBoolean("discord.send.clearwarns", true)) {
-            de.shadowcrest.mod.util.DiscordNotifier.notify(plugin, staffMessage);
-        }
-
-        // Sender Confirmation
         sender.sendMessage(
                 MessageUtil.format(
                         plugin,

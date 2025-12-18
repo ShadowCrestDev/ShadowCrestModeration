@@ -23,11 +23,7 @@ public class BanCommand implements CommandExecutor {
         }
 
         if (args.length < 2) {
-            // optional besser: messages.ban_usage (sonst reason_required)
-            String usage = MessageUtil.msg(plugin, "messages.ban_usage");
-            sender.sendMessage(usage == null || usage.isBlank()
-                    ? MessageUtil.msg(plugin, "messages.reason_required")
-                    : usage);
+            sender.sendMessage(MessageUtil.msg(plugin, "messages.reason_required"));
             return true;
         }
 
@@ -36,27 +32,16 @@ public class BanCommand implements CommandExecutor {
 
         Player online = Bukkit.getPlayerExact(targetName);
 
-        // Ban immer nach Namen erlauben (auch wenn Spieler nie online war)
         Bukkit.getBanList(BanList.Type.NAME).addBan(targetName, reason, null, "ShadowCrest");
 
         String staff = sender.getName();
-
-        // Staff message einmal bauen
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.ban",
                 MessageUtil.ph("staff", staff, "player", targetName, "reason", reason)
         );
-
-        // Ingame Staff-Log
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
 
-        // Discord Webhook
-        if (plugin.getConfig().getBoolean("discord.send.ban", true)) {
-            de.shadowcrest.mod.util.DiscordNotifier.notify(plugin, staffMessage);
-        }
-
-        // Wenn online -> kicken
         if (online != null) {
             String screen = MessageUtil.format(plugin, "messages.ban_screen", MessageUtil.ph("reason", reason));
             online.kick(MessageUtil.component(screen));
