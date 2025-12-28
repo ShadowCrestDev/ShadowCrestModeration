@@ -96,23 +96,6 @@ Server: Paper, Spigot
 
 ---
 
-## 🧠 Auto-Strafen (Warn-Settings)
-
-Beispiel aus der `config.yml`:
-
-```yml
-warn_settings:
-  actions:
-    - warns: 3
-      action: TEMPBAN
-      duration: "24h"
-      reason: "Zu viele Verwarnungen"
-    - warns: 5
-      action: BAN
-      reason: "Maximale Verwarnungen erreicht"
-
----
-
 
 
 📄 Lizenz
