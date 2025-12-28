@@ -1,7 +1,10 @@
 name: ShadowCrestModeration
 version: 1.0.0
 main: de.shadowcrest.mod.ShadowCrestMod
-api-version: "1.21"
+api-version: 1.21
+
+author: ShadowCrest
+
 commands:
   warn:
     usage: /warn <spieler> <grund...>
@@ -47,6 +50,8 @@ permissions:
   shadowcrest.mod.ipban:
     default: op
   shadowcrest.mod.notify:
+    default: op
+  shadowcrest.mod.reload:
     default: op
   shadowcrest.mod.info:
     default: op

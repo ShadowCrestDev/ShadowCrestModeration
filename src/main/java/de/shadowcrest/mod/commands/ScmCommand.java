@@ -37,12 +37,19 @@ public class ScmCommand implements CommandExecutor {
             }
 
             String ver = plugin.getDescription().getVersion();
-            boolean discord = plugin.getConfig().getBoolean("discord.enabled", false);
+            String author = String.join(", ", plugin.getDescription().getAuthors());
 
-            sender.sendMessage(MessageUtil.format(plugin, "messages.scm_info",
-                    MessageUtil.ph("version", ver, "discord", discord ? "an" : "aus")));
+            sender.sendMessage(MessageUtil.format(
+                    plugin,
+                    "messages.scm_info",
+                    MessageUtil.ph(
+                            "version", ver,
+                            "author", author
+                    )
+            ));
             return true;
         }
+
 
         sender.sendMessage(MessageUtil.msg(plugin, "messages.scm_usage"));
         return true;

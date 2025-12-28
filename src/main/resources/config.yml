@@ -8,9 +8,9 @@ messages:
   duration_required: "{prefix}&cDu musst eine Dauer angeben! Beispiel: 24h, 30m, 7d"
   invalid_duration: "{prefix}&cUngültige Dauer! Nutze z.B. 30m, 24h, 7d."
 
-  scm_usage: "{prefix}&cNutze: /scm reload &7oder &f/scm info"
-  scm_info: "{prefix}&7Version: &f{version} &8| &7Discord: &f{discord}"
-
+  scm_usage: "{prefix}&7Nutze: &f/scm reload &7oder &f/scm info"
+  reload_done: "{prefix}&aConfig wurde neu geladen."
+  scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
   warn_given: "{prefix}&e{player} &7wurde gewarnt. &7Grund: &f{reason} &8(&7Warns: &f{warns}&8)"
   warned_screen: "&cDu wurdest verwarnt!\n&7Grund: &f{reason}\n&7Warns: &f{warns}"
