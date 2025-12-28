@@ -111,6 +111,8 @@ warn_settings:
       action: BAN
       reason: "Maximale Verwarnungen erreicht"
 
+---
+
 
 
 📄 Lizenz
