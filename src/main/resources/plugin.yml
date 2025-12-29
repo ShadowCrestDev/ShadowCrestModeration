@@ -26,11 +26,12 @@ commands:
     usage: /clearwarns <spieler>
   warns:
     usage: /warns <spieler>
-  commands:
   ip:
     usage: /ip <spieler>
   playtime:
     usage: /playtime <spieler>
+  ticket:
+    usage: /ticket
 
 
 
@@ -64,6 +65,12 @@ permissions:
   shadowcrest.mod.warns:
     default: op
   shadowcrest.mod.playtime:
+    default: op
+  shadowcrest.mod.ticket.notify:
+    default: op
+  shadowcrest.mod.ticket.accept:
+    default: op
+  shadowcrest.mod.ticket.tp:
     default: op
 
 

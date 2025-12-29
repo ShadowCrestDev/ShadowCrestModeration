@@ -1,5 +1,38 @@
 prefix: "&8[&5ShadowCrest&8] &r"
 
+tickets:
+  enabled: true
+  cooldown_seconds: 30
+  max_open_per_player: 3
+  reasons:
+    - "Hacking"
+    - "Duping"
+    - "Griefing"
+    - "Beleidigung"
+    - "Bugusing"
+    - "Sonstiges"
+
+warn_settings:
+  # Wird NUR ausgelöst, wenn warns == <warns> erreicht wird (exakt).
+  # action: TEMPBAN oder BAN
+  actions:
+    - warns: 3
+      action: TEMPBAN
+      duration: "24h"
+      reason: "Zu viele Verwarnungen"
+    - warns: 5
+      action: BAN
+      reason: "Maximale Verwarnungen erreicht"
+  storage:
+      per_player_file: true
+      max_warn_list_on_join: 5
+      tickets_file: "tickets.yml"
+  playtime:
+      enabled: true
+      show_in_join_log: true
+      # Anzeigeformat (Platzhalter: {days} {hours} {minutes})
+      format: "{days}d {hours}h {minutes}m"
+
 messages:
   no_permission: "{prefix}&cDazu hast du keine Rechte."
   player_not_found: "{prefix}&cSpieler nicht gefunden oder war noch nie online."
@@ -44,6 +77,23 @@ messages:
   playtime_result: "{prefix}&7Spielzeit von &f{player}&7: &a{playtime}"
   playtime_disabled: "{prefix}&cPlaytime ist deaktiviert."
 
+  ticket_disabled: "{prefix}&cTickets sind deaktiviert."
+  ticket_cooldown: "{prefix}&cBitte warte noch &f{seconds}s&c, bevor du ein neues Ticket erstellst."
+  ticket_max_open: "{prefix}&cDu hast bereits &f{max}&c offene Tickets."
+  ticket_gui_title: "&5Ticket erstellen"
+  ticket_choose_player: "{prefix}&7Schreibe den Spielernamen in den Chat (auch offline). Tippe &cabort&7 zum Abbrechen."
+  ticket_choose_info: "{prefix}&7Optional: Schreibe Zusatzinfos in den Chat oder tippe &askip&7."
+  ticket_created: "{prefix}&aTicket erstellt! &7(ID: &f#{id}&7)"
+  ticket_aborted: "{prefix}&cTicket-Erstellung abgebrochen."
+
+  staff_ticket_new: "{prefix}&d&lNEUES TICKET &7#&f{id} &7| &f{creator} &7-> &f{target} &7| &f{reason}"
+  staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
+  staff_ticket_claimed: "{prefix}&aTicket &f#{id}&a wurde von &f{staff}&a übernommen."
+  staff_no_tickets: "{prefix}&cKeine offenen Tickets vorhanden."
+  staff_tp_usage: "{prefix}&7Nutze: &f/scm tpticket <id>"
+  staff_ticket_not_found: "{prefix}&cTicket nicht gefunden."
+  staff_ticket_creator_offline: "{prefix}&cDer Ticket-Ersteller ist offline."
+
 
 
 
@@ -72,25 +122,6 @@ messages:
   warn_list_format: " &8- &f{date} &7| &f{reason}"
   warn_list_empty: " &8- &7Keine"
 
-warn_settings:
-  # Wird NUR ausgelöst, wenn warns == <warns> erreicht wird (exakt).
-  # action: TEMPBAN oder BAN
-  actions:
-    - warns: 3
-      action: TEMPBAN
-      duration: "24h"
-      reason: "Zu viele Verwarnungen"
-    - warns: 5
-      action: BAN
-      reason: "Maximale Verwarnungen erreicht"
 
-storage:
-  per_player_file: true
-  max_warn_list_on_join: 5
 
-playtime:
-  enabled: true
-  show_in_join_log: true
-  # Anzeigeformat (Platzhalter: {days} {hours} {minutes})
-  format: "{days}d {hours}h {minutes}m"
 

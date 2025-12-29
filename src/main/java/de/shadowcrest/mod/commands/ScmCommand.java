@@ -2,7 +2,11 @@ package de.shadowcrest.mod.commands;
 
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class ScmCommand implements CommandExecutor {
 
@@ -20,6 +24,7 @@ public class ScmCommand implements CommandExecutor {
             return true;
         }
 
+        // /scm reload
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("shadowcrest.mod.reload")) {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
@@ -30,6 +35,7 @@ public class ScmCommand implements CommandExecutor {
             return true;
         }
 
+        // /scm info
         if (args[0].equalsIgnoreCase("info")) {
             if (!sender.hasPermission("shadowcrest.mod.info")) {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
@@ -42,14 +48,84 @@ public class ScmCommand implements CommandExecutor {
             sender.sendMessage(MessageUtil.format(
                     plugin,
                     "messages.scm_info",
-                    MessageUtil.ph(
-                            "version", ver,
-                            "author", author
-                    )
+                    MessageUtil.ph("version", ver, "author", author)
             ));
             return true;
         }
 
+        // /scm accept
+        if (args[0].equalsIgnoreCase("accept")) {
+            if (!sender.hasPermission("shadowcrest.mod.ticket.accept")) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
+                return true;
+            }
+
+            var next = plugin.getTicketManager().getNextOpenTicket();
+            if (next == null) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_no_tickets"));
+                return true;
+            }
+
+            String staffName = sender.getName();
+            UUID staffUuid = (sender instanceof Player sp) ? sp.getUniqueId() : null;
+
+            next.claim(staffUuid, staffName);
+            plugin.getTicketManager().save();
+
+            String claimed = MessageUtil.format(
+                    plugin,
+                    "messages.staff_ticket_claimed",
+                    MessageUtil.ph("id", String.valueOf(next.getId()), "staff", staffName)
+            );
+
+            MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
+            sender.sendMessage(claimed);
+
+            sender.sendMessage(MessageUtil.color(
+                    plugin.getConfig().getString("prefix", "") + "&7Nutze: &f/scm tpticket " + next.getId()
+            ));
+            return true;
+        }
+
+        // /scm tpticket <id>
+        if (args[0].equalsIgnoreCase("tpticket")) {
+            if (!sender.hasPermission("shadowcrest.mod.ticket.tp")) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
+                return true;
+            }
+            if (!(sender instanceof Player staff)) {
+                sender.sendMessage("Only players can teleport.");
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_tp_usage"));
+                return true;
+            }
+
+            int id;
+            try {
+                id = Integer.parseInt(args[1]);
+            } catch (Exception ex) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
+                return true;
+            }
+
+            var t = plugin.getTicketManager().getTicket(id);
+            if (t == null) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
+                return true;
+            }
+
+            Player creator = Bukkit.getPlayer(t.getCreatorUuid());
+            if (creator == null) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_creator_offline"));
+                return true;
+            }
+
+            staff.teleport(creator.getLocation());
+            sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix", "") + "&aTeleportiert."));
+            return true;
+        }
 
         sender.sendMessage(MessageUtil.msg(plugin, "messages.scm_usage"));
         return true;
