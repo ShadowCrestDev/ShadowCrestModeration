@@ -135,6 +135,37 @@ public class ScmCommand implements CommandExecutor {
                     "&aTeleportiert zu &f" + creator.getName() + "&a (Ticket #" + id + ")"));
             return true;
         }
+// /scm ticket <id>  (öffnet Staff-GUI)
+        if (args[0].equalsIgnoreCase("ticket")) {
+            if (!sender.hasPermission("shadowcrest.mod.ticket.gui")) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
+                return true;
+            }
+            if (!(sender instanceof org.bukkit.entity.Player staff)) {
+                sender.sendMessage("Only players can open GUI.");
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") + "&cNutze: /scm ticket <id>"));
+                return true;
+            }
+
+            int id;
+            try { id = Integer.parseInt(args[1]); }
+            catch (Exception ex) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
+                return true;
+            }
+
+            var t = plugin.getTicketManager().getTicket(id);
+            if (t == null) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
+                return true;
+            }
+
+            de.shadowcrest.mod.tickets.gui.StaffTicketGui.open(plugin, staff, t);
+            return true;
+        }
 
         // /scm close <id> [grund...]
         if (args[0].equalsIgnoreCase("close")) {

@@ -14,14 +14,21 @@ public class ShadowCrestMod extends JavaPlugin {
 
     private PlayerDataManager dataManager;
     private TicketManager ticketManager;
+    private de.shadowcrest.mod.tickets.TicketManager ticketManager;
+
+    public de.shadowcrest.mod.tickets.TicketManager getTicketManager() {
+        return ticketManager;
+    }
+
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
         // Tickets
-        this.ticketManager = new TicketManager(this);
+        this.ticketManager = new de.shadowcrest.mod.tickets.TicketManager(this);
         this.ticketManager.load();
+
 
         printBanner();
 
@@ -51,6 +58,8 @@ public class ShadowCrestMod extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TicketGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new TicketChatListener(this), this);
         getServer().getPluginManager().registerEvents(new TicketQuitListener(this), this);
+        getServer().getPluginManager().registerEvents(new de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener(this), this);
+
 
         getLogger().info("ShadowCrestModeration enabled.");
     }

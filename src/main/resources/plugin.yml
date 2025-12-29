@@ -76,6 +76,9 @@ permissions:
     default: op
   shadowcrest.mod.ticket.close:
     default: op
+  shadowcrest.mod.ticket.gui:
+    default: op
+
 
 
 

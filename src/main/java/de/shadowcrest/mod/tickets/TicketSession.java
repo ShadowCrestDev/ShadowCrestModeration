@@ -7,8 +7,10 @@ public class TicketSession {
     public enum Step {
         CATEGORY,
         TARGET,
-        INFO
-    }
+        INFO,
+        STAFF_CLOSE_REASON
+
+        }
 
     private Step step = Step.CATEGORY;
 
@@ -31,4 +33,8 @@ public class TicketSession {
 
     public String getInfo() { return info; }
     public void setInfo(String info) { this.info = info; }
+    private Integer staffCloseTicketId;
+    public Integer getStaffCloseTicketId() { return staffCloseTicketId; }
+    public void setStaffCloseTicketId(Integer id) { this.staffCloseTicketId = id; }
+
 }
