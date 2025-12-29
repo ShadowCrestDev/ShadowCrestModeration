@@ -41,7 +41,7 @@ messages:
   duration_required: "{prefix}&cDu musst eine Dauer angeben! Beispiel: 24h, 30m, 7d"
   invalid_duration: "{prefix}&cUngültige Dauer! Nutze z.B. 30m, 24h, 7d."
 
-  scm_usage: "{prefix}&7Nutze: &f/scm reload &7oder &f/scm info"
+  scm_usage: "{prefix}&7Nutze: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets"
   reload_done: "{prefix}&aConfig wurde neu geladen."
   scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
@@ -79,21 +79,24 @@ messages:
 
   ticket_disabled: "{prefix}&cTickets sind deaktiviert."
   ticket_cooldown: "{prefix}&cBitte warte noch &f{seconds}s&c, bevor du ein neues Ticket erstellst."
-  ticket_max_open: "{prefix}&cDu hast bereits &f{max}&c offene Tickets."
-  ticket_gui_title: "&5Ticket erstellen"
-  ticket_choose_player: "{prefix}&7Schreibe den Spielernamen in den Chat (auch offline). Tippe &cabort&7 zum Abbrechen."
-  ticket_choose_info: "{prefix}&7Optional: Schreibe Zusatzinfos in den Chat oder tippe &askip&7."
-  ticket_created: "{prefix}&aTicket erstellt! &7(ID: &f#{id}&7)"
-  ticket_aborted: "{prefix}&cTicket-Erstellung abgebrochen."
+  ticket_max_open: "{prefix}&cDu hast bereits &f{max}&c offene Tickets. Bitte warte, bis ein Supporter sie bearbeitet."
+  ticket_gui_title: "&8SCM &7Tickets"
+  ticket_select_category: "{prefix}&7Wähle eine Kategorie im GUI."
+  ticket_enter_player: "{prefix}&eBitte schreibe den Spielernamen in den Chat (oder &cAbbrechen&e)."
+  ticket_player_cancel: "{prefix}&cTicket-Erstellung abgebrochen."
+  ticket_player_unknown: "{prefix}&cSpieler &f{player}&c war noch nie online. Ticket wird trotzdem erstellt."
+  ticket_enter_info: "{prefix}&7Optional: Schreibe eine Zusatzinfo in den Chat oder schreibe &f- &7für keine Info."
+  ticket_created: "{prefix}&aTicket erstellt! &7ID: &f#{id} &7Kategorie: &f{category} &7Spieler: &f{player}"
+  ticket_notify: "&c&lNEUES TICKET! &7(#%id%) &f{player} &7→ &e{category} &8| &7Nutze: &f/scm accept"
+
 
   staff_ticket_new: "{prefix}&d&lNEUES TICKET &7#&f{id} &7| &f{creator} &7-> &f{target} &7| &f{reason}"
   staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
-  staff_ticket_claimed: "{prefix}&aTicket &f#{id}&a wurde von &f{staff}&a übernommen."
-  staff_no_tickets: "{prefix}&cKeine offenen Tickets vorhanden."
-  staff_tp_usage: "{prefix}&7Nutze: &f/scm tpticket <id>"
+  staff_ticket_claimed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &abeansprucht!"
+  staff_no_tickets: "{prefix}&7Keine offenen Tickets vorhanden."
+  staff_tp_usage: "{prefix}&cNutze: /scm tpticket <id>"
   staff_ticket_not_found: "{prefix}&cTicket nicht gefunden."
-  staff_ticket_creator_offline: "{prefix}&cDer Ticket-Ersteller ist offline."
-
+  staff_ticket_creator_offline: "{prefix}&cTicket-Ersteller ist aktuell offline."
 
 
 

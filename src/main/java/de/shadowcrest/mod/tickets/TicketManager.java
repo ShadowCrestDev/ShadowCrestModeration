@@ -1,7 +1,6 @@
 package de.shadowcrest.mod.tickets;
 
 import de.shadowcrest.mod.ShadowCrestMod;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -22,12 +21,17 @@ public class TicketManager {
         this.plugin = plugin;
     }
 
-    public Map<UUID, TicketSession> getSessions() { return sessions; }
+    public Map<UUID, TicketSession> getSessions() {
+        return sessions;
+    }
 
     public int getOpenCount(UUID creator) {
         int c = 0;
         for (Ticket t : tickets.values()) {
-            if (t.getCreatorUuid().equals(creator) && (t.getStatus() == TicketStatus.OPEN || t.getStatus() == TicketStatus.CLAIMED)) c++;
+            if (t.getCreatorUuid().equals(creator)
+                    && (t.getStatus() == TicketStatus.OPEN || t.getStatus() == TicketStatus.CLAIMED)) {
+                c++;
+            }
         }
         return c;
     }
@@ -45,14 +49,56 @@ public class TicketManager {
         lastCreate.put(creator, System.currentTimeMillis());
     }
 
-    public Ticket createTicket(UUID creatorUuid, String creatorName, UUID targetUuid, String targetName, String reason, String info) {
+    public Ticket createTicket(
+            UUID creatorUuid,
+            String creatorName,
+            UUID targetUuid,
+            String targetName,
+            String reason,
+            String info
+    ) {
         int id = nextId++;
-        Ticket t = new Ticket(id, System.currentTimeMillis(), creatorUuid, creatorName, targetUuid, targetName, reason, info);
+        Ticket t = new Ticket(
+                id,
+                System.currentTimeMillis(),
+                creatorUuid,
+                creatorName,
+                targetUuid,
+                targetName,
+                reason,
+                info
+        );
+
         tickets.put(id, t);
+
+        // Cooldown setzen
+        markCreatedNow(creatorUuid);
+
+        // Direkt speichern
+        save();
+
+        // 🔔 STAFF NOTIFY (auffällig)
+        String notify = de.shadowcrest.mod.util.MessageUtil.format(
+                plugin,
+                "messages.ticket_notify",
+                de.shadowcrest.mod.util.MessageUtil.ph(
+                        "id", id,
+                        "player", creatorName,
+                        "category", reason
+                )
+        );
+
+        de.shadowcrest.mod.util.MessageUtil.broadcastToStaff(
+                "shadowcrest.mod.ticket.notify",
+                notify
+        );
+
         return t;
     }
 
-    public Ticket getTicket(int id) { return tickets.get(id); }
+    public Ticket getTicket(int id) {
+        return tickets.get(id);
+    }
 
     public Ticket getNextOpenTicket() {
         for (Ticket t : tickets.values()) {
@@ -61,9 +107,21 @@ public class TicketManager {
         return null;
     }
 
+    /** OPEN + CLAIMED Tickets (für Staff-Übersicht) */
+    public List<Ticket> getOpenTickets() {
+        List<Ticket> list = new ArrayList<>();
+        for (Ticket t : tickets.values()) {
+            if (t.getStatus() == TicketStatus.OPEN || t.getStatus() == TicketStatus.CLAIMED) {
+                list.add(t);
+            }
+        }
+        return list;
+    }
+
     public void load() {
         try {
-            File f = new File(plugin.getDataFolder(), plugin.getConfig().getString("storage.tickets_file", "tickets.yml"));
+            File f = new File(plugin.getDataFolder(),
+                    plugin.getConfig().getString("storage.tickets_file", "tickets.yml"));
             if (!f.exists()) return;
 
             YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
@@ -91,17 +149,9 @@ public class TicketManager {
                     Ticket t = new Ticket(id, createdAt, creatorUuid, creatorName, targetUuid, targetName, reason, info);
 
                     String st = s.getString("status", "OPEN");
-                    try { t.setStatus(TicketStatus.valueOf(st)); } catch (Exception ignored) {}
-
-                    String claimedByUuid = s.getString("claimedByUuid", null);
-                    String claimedByName = s.getString("claimedByName", null);
-                    long claimedAt = s.getLong("claimedAt", 0L);
-
-                    if (claimedByUuid != null && claimedByName != null && t.getStatus() == TicketStatus.CLAIMED) {
-                        // minimal restore
-                        // (wir setzen die Felder nicht einzeln, weil Ticket.claim setzt status auf CLAIMED)
-                        // -> workaround: status ist bereits CLAIMED, nur metadata brauchen wir nicht zwingend fürs MVP
-                    }
+                    try {
+                        t.setStatus(TicketStatus.valueOf(st));
+                    } catch (Exception ignored) {}
 
                     tickets.put(id, t);
                 }
@@ -117,9 +167,10 @@ public class TicketManager {
     public void save() {
         try {
             if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
-            File f = new File(plugin.getDataFolder(), plugin.getConfig().getString("storage.tickets_file", "tickets.yml"));
-            YamlConfiguration yml = new YamlConfiguration();
+            File f = new File(plugin.getDataFolder(),
+                    plugin.getConfig().getString("storage.tickets_file", "tickets.yml"));
 
+            YamlConfiguration yml = new YamlConfiguration();
             yml.set("next_id", nextId);
 
             for (Ticket t : tickets.values()) {

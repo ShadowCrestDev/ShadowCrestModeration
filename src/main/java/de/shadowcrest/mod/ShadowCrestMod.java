@@ -4,6 +4,9 @@ import de.shadowcrest.mod.commands.*;
 import de.shadowcrest.mod.data.PlayerDataManager;
 import de.shadowcrest.mod.listeners.JoinListener;
 import de.shadowcrest.mod.tickets.TicketManager;
+import de.shadowcrest.mod.tickets.gui.TicketGuiListener;
+import de.shadowcrest.mod.tickets.listeners.TicketChatListener;
+import de.shadowcrest.mod.tickets.listeners.TicketQuitListener;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,16 +19,14 @@ public class ShadowCrestMod extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
-        // Ticket-System
+        // Tickets
         this.ticketManager = new TicketManager(this);
         this.ticketManager.load();
 
         printBanner();
 
-        // Player Data
         this.dataManager = new PlayerDataManager(this);
 
-        // Moderation Commands
         register("warn", new WarnCommand(this));
         register("warns", new WarnsCommand(this));
         register("clearwarns", new ClearWarnsCommand(this));
@@ -44,38 +45,16 @@ public class ShadowCrestMod extends JavaPlugin {
         register("scm", new ScmCommand(this));
         register("ticket", new TicketCommand(this));
 
-        // Listener
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(
-                new de.shadowcrest.mod.tickets.gui.TicketGuiListener(this), this
-        );
-        getServer().getPluginManager().registerEvents(
-                new de.shadowcrest.mod.tickets.listeners.TicketChatListener(this), this
-        );
-        getServer().getPluginManager().registerEvents(
-                new de.shadowcrest.mod.tickets.listeners.TicketQuitListener(this), this
-        );
+
+        // Ticket listeners
+        getServer().getPluginManager().registerEvents(new TicketGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new TicketChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new TicketQuitListener(this), this);
 
         getLogger().info("ShadowCrestModeration enabled.");
     }
 
-    @Override
-    public void onDisable() {
-        if (ticketManager != null) {
-            ticketManager.save();
-        }
-    }
-
-    // ===== Getter =====
-    public PlayerDataManager getDataManager() {
-        return dataManager;
-    }
-
-    public TicketManager getTicketManager() {
-        return ticketManager;
-    }
-
-    // ===== Helpers =====
     private void register(String cmd, CommandExecutor exec) {
         var c = getCommand(cmd);
         if (c != null) c.setExecutor(exec);
@@ -95,5 +74,13 @@ public class ShadowCrestMod extends JavaPlugin {
         getLogger().info("       Version: " + getDescription().getVersion());
         getLogger().info("       Author: ShadowCrest");
         getLogger().info("================================");
+    }
+
+    public PlayerDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public TicketManager getTicketManager() {
+        return ticketManager;
     }
 }

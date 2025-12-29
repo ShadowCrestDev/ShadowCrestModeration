@@ -72,6 +72,8 @@ permissions:
     default: op
   shadowcrest.mod.ticket.tp:
     default: op
+  shadowcrest.mod.ticket.list:
+    default: op
 
 
 

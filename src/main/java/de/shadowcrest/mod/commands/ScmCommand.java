@@ -3,10 +3,9 @@ package de.shadowcrest.mod.commands;
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 public class ScmCommand implements CommandExecutor {
 
@@ -67,23 +66,20 @@ public class ScmCommand implements CommandExecutor {
             }
 
             String staffName = sender.getName();
-            UUID staffUuid = (sender instanceof Player sp) ? sp.getUniqueId() : null;
+            java.util.UUID staffUuid = (sender instanceof org.bukkit.entity.Player sp) ? sp.getUniqueId() : null;
 
             next.claim(staffUuid, staffName);
             plugin.getTicketManager().save();
 
-            String claimed = MessageUtil.format(
-                    plugin,
-                    "messages.staff_ticket_claimed",
-                    MessageUtil.ph("id", String.valueOf(next.getId()), "staff", staffName)
-            );
+            String claimed = MessageUtil.format(plugin, "messages.staff_ticket_claimed",
+                    MessageUtil.ph("id", next.getId(), "staff", staffName));
 
             MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
-            sender.sendMessage(claimed);
 
-            sender.sendMessage(MessageUtil.color(
-                    plugin.getConfig().getString("prefix", "") + "&7Nutze: &f/scm tpticket " + next.getId()
-            ));
+            sender.sendMessage(claimed);
+            sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix", "") +
+                    "&e➡ &7Nutze: &f/scm tpticket " + next.getId()));
+
             return true;
         }
 
@@ -93,19 +89,20 @@ public class ScmCommand implements CommandExecutor {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
                 return true;
             }
-            if (!(sender instanceof Player staff)) {
+
+            if (!(sender instanceof org.bukkit.entity.Player staff)) {
                 sender.sendMessage("Only players can teleport.");
                 return true;
             }
+
             if (args.length < 2) {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_tp_usage"));
                 return true;
             }
 
             int id;
-            try {
-                id = Integer.parseInt(args[1]);
-            } catch (Exception ex) {
+            try { id = Integer.parseInt(args[1]); }
+            catch (Exception ex) {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
                 return true;
             }
@@ -116,14 +113,40 @@ public class ScmCommand implements CommandExecutor {
                 return true;
             }
 
-            Player creator = Bukkit.getPlayer(t.getCreatorUuid());
+            var creator = Bukkit.getPlayer(t.getCreatorUuid());
             if (creator == null) {
                 sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_creator_offline"));
                 return true;
             }
 
             staff.teleport(creator.getLocation());
-            sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix", "") + "&aTeleportiert."));
+            staff.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") +
+                    "&aTeleportiert zu &f" + creator.getName() + "&a (Ticket #" + id + ")"));
+            return true;
+        }
+
+        // /scm tickets  (Punkt 5: Übersicht)
+        if (args[0].equalsIgnoreCase("tickets")) {
+            if (!sender.hasPermission("shadowcrest.mod.ticket.list")) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
+                return true;
+            }
+
+            var open = plugin.getTicketManager().getOpenTickets();
+            sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") +
+                    "&eOffene Tickets: &f" + open.size()));
+
+            for (var t : open) {
+                boolean claimed = (t.getStatus() == de.shadowcrest.mod.tickets.TicketStatus.CLAIMED);
+
+                sender.sendMessage(MessageUtil.color(
+                        "&8- &e#" + t.getId() +
+                                " &7von &f" + t.getCreatorName() +
+                                " &7| Grund: &f" + t.getReason() +
+                                (claimed ? " &7| &aClaimed" : " &7| &cUnclaimed")
+                ));
+            }
+
             return true;
         }
 
