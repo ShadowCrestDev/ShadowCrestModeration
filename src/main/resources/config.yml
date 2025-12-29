@@ -87,16 +87,21 @@ messages:
   ticket_player_unknown: "{prefix}&cSpieler &f{player}&c war noch nie online. Ticket wird trotzdem erstellt."
   ticket_enter_info: "{prefix}&7Optional: Schreibe eine Zusatzinfo in den Chat oder schreibe &f- &7für keine Info."
   ticket_created: "{prefix}&aTicket erstellt! &7ID: &f#{id} &7Kategorie: &f{category} &7Spieler: &f{player}"
-  ticket_notify: "&c&lNEUES TICKET! &7(#%id%) &f{player} &7→ &e{category} &8| &7Nutze: &f/scm accept"
+  ticket_notify: "&c&lNEUES TICKET! &7(# {id}) &f{player} &7→ &e{category} &8| &7Nutze: &f/scm accept"
+  ticket_closed_user: "{prefix}&7Dein Ticket &f#{id} &7wurde geschlossen von &f{staff}&7. Grund: &f{reason}"
 
 
-  staff_ticket_new: "{prefix}&d&lNEUES TICKET &7#&f{id} &7| &f{creator} &7-> &f{target} &7| &f{reason}"
+
   staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &abeansprucht!"
   staff_no_tickets: "{prefix}&7Keine offenen Tickets vorhanden."
   staff_tp_usage: "{prefix}&cNutze: /scm tpticket <id>"
   staff_ticket_not_found: "{prefix}&cTicket nicht gefunden."
   staff_ticket_creator_offline: "{prefix}&cTicket-Ersteller ist aktuell offline."
+  staff_close_usage: "{prefix}&cNutze: /scm close <id> [grund...]"
+  staff_ticket_already_closed: "{prefix}&cDieses Ticket ist bereits geschlossen."
+  staff_ticket_closed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &ageschlossen. &7Grund: &f{reason}"
+
 
 
 
