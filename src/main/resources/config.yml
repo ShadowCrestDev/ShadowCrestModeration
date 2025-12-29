@@ -11,6 +11,12 @@ tickets:
     - "Beleidigung"
     - "Bugusing"
     - "Sonstiges"
+  staff_close_reasons:
+    - "Erledigt"
+    - "Falschmeldung"
+    - "Keine Beweise"
+    - "Regeln erklärt"
+    - "Spam"
 
 warn_settings:
   # Wird NUR ausgelöst, wenn warns == <warns> erreicht wird (exakt).
@@ -41,7 +47,7 @@ messages:
   duration_required: "{prefix}&cDu musst eine Dauer angeben! Beispiel: 24h, 30m, 7d"
   invalid_duration: "{prefix}&cUngültige Dauer! Nutze z.B. 30m, 24h, 7d."
 
-  scm_usage: "{prefix}&7Nutze: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets"
+  scm_usage: "{prefix}&7Nutze: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets &7| &f/scm gui"
   reload_done: "{prefix}&aConfig wurde neu geladen."
   scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
@@ -86,9 +92,10 @@ messages:
   ticket_player_cancel: "{prefix}&cTicket-Erstellung abgebrochen."
   ticket_player_unknown: "{prefix}&cSpieler &f{player}&c war noch nie online. Ticket wird trotzdem erstellt."
   ticket_enter_info: "{prefix}&7Optional: Schreibe eine Zusatzinfo in den Chat oder schreibe &f- &7für keine Info."
-  ticket_created: "{prefix}&aTicket erstellt! &7ID: &f#{id} &7Kategorie: &f{category} &7Spieler: &f{player}"
-  ticket_notify: "&c&lNEUES TICKET! &7(# {id}) &f{player} &7→ &e{category} &8| &7Nutze: &f/scm accept"
+  ticket_created: "{prefix}&aTicket erstellt! &7ID: &f#{id} &7Kategorie: {category} &7Spieler: {player}"
+  ticket_notify: "&c&lNEUES TICKET! &7(# {id}) {player} &7→ {category} &8| &7Nutze: &f/scm accept"
   ticket_closed_user: "{prefix}&7Dein Ticket &f#{id} &7wurde geschlossen von &f{staff}&7. Grund: &f{reason}"
+  ticket_player_gui_title: "&8SCM &7Spieler wählen"
 
 
 

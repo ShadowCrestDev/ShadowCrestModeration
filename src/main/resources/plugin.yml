@@ -17,7 +17,7 @@ commands:
   ipban:
     usage: /ipban <spieler|ip> <grund...>
   scm:
-    usage: /scm reload|info|accept|tpticket|tickets|close
+    usage: /scm reload|info|accept|tpticket|tickets|close|gui
   unban:
     usage: /unban <spieler>
   unipban:
@@ -76,9 +76,8 @@ permissions:
     default: op
   shadowcrest.mod.ticket.close:
     default: op
-  shadowcrest.mod.ticket.gui:
+  shadowcrest.mod.ticket.staff:
     default: op
-
 
 
 

@@ -9,26 +9,25 @@ import de.shadowcrest.mod.tickets.listeners.TicketChatListener;
 import de.shadowcrest.mod.tickets.listeners.TicketQuitListener;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
+import de.shadowcrest.mod.tickets.gui.PlayerSelectGuiListener;
+import de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener;
+import de.shadowcrest.mod.tickets.listeners.StaffTicketCloseChatListener;
+
+
+
 
 public class ShadowCrestMod extends JavaPlugin {
 
     private PlayerDataManager dataManager;
     private TicketManager ticketManager;
-    private de.shadowcrest.mod.tickets.TicketManager ticketManager;
-
-    public de.shadowcrest.mod.tickets.TicketManager getTicketManager() {
-        return ticketManager;
-    }
-
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
         // Tickets
-        this.ticketManager = new de.shadowcrest.mod.tickets.TicketManager(this);
+        this.ticketManager = new TicketManager(this);
         this.ticketManager.load();
-
 
         printBanner();
 
@@ -56,9 +55,14 @@ public class ShadowCrestMod extends JavaPlugin {
 
         // Ticket listeners
         getServer().getPluginManager().registerEvents(new TicketGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerSelectGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new TicketChatListener(this), this);
         getServer().getPluginManager().registerEvents(new TicketQuitListener(this), this);
-        getServer().getPluginManager().registerEvents(new de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener(this), this);
+        // Staff Ticket GUI
+        getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new StaffTicketCloseChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
+
 
 
         getLogger().info("ShadowCrestModeration enabled.");

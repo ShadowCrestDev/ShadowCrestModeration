@@ -1,90 +1,95 @@
 package de.shadowcrest.mod.tickets.gui;
 
 import de.shadowcrest.mod.ShadowCrestMod;
+import de.shadowcrest.mod.tickets.Ticket;
 import de.shadowcrest.mod.tickets.TicketStatus;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public final class StaffTicketGui {
 
     private StaffTicketGui() {}
 
-    public static String title(ShadowCrestMod plugin, int id) {
-        return MessageUtil.color("&8SCM &7Ticket &8#&f" + id);
+    public static Inventory build(ShadowCrestMod plugin, int page) {
+        return build(plugin, null, page);
     }
 
-    public static void open(ShadowCrestMod plugin, Player staff, Ticket t) {
-        Inventory inv = Bukkit.createInventory(null, 27, title(plugin, t.getId()));
+    public static Inventory build(ShadowCrestMod plugin, org.bukkit.entity.Player viewer, int page) {
+        String base = MessageUtil.color(plugin.getConfig().getString("messages.staff_ticket_gui_title", "&8SCM &cTickets"));
+        String title = base + MessageUtil.color(" &7Seite " + page);
 
-        // Info Item (Papier)
-        inv.setItem(13, infoItem(plugin, t));
+        Inventory inv = Bukkit.createInventory(null, 54, title);
 
-        // Claim (Goldblock) / Already claimed
-        inv.setItem(11, button(
-                t.getStatus() == TicketStatus.OPEN ? Material.GOLD_BLOCK : Material.GRAY_DYE,
-                t.getStatus() == TicketStatus.OPEN ? "&e&lTicket beanspruchen" : "&7Bereits beansprucht/geschlossen",
-                List.of("&7Status: &f" + t.getStatus().name(),
-                        "&7Claimed by: &f" + (t.isClaimed() ? t.getClaimedByName() : "-"))
-        ));
+        // Rahmen
+        ItemStack glass = item(Material.GRAY_STAINED_GLASS_PANE, " ", List.of());
+        for (int i = 0; i < 54; i++) inv.setItem(i, glass);
 
-        // Teleport (Ender Pearl)
-        inv.setItem(15, button(
-                Material.ENDER_PEARL,
-                "&a&lZum Ersteller teleportieren",
-                List.of("&7Teleportiert dich zum Ticket-Ersteller",
-                        "&7Nur möglich wenn er online ist.")
-        ));
+        // Slots für Tickets (28 Slots)
+        int[] slots = {
+                10,11,12,13,14,15,16,
+                19,20,21,22,23,24,25,
+                28,29,30,31,32,33,34,
+                37,38,39,40,41,42,43
+        };
 
-        // Close (Barrier)
-        inv.setItem(26, button(
-                Material.BARRIER,
-                "&c&lTicket schließen",
-                List.of("&7Schließt das Ticket sofort.",
-                        "&7Grund: &fGUI-Closed")
-        ));
+        List<Ticket> list = plugin.getTicketManager().getOpenTickets();
+        int perPage = slots.length;
+        int maxPage = Math.max(1, (int) Math.ceil(list.size() / (double) perPage));
+        if (page < 1) page = 1;
+        if (page > maxPage) page = maxPage;
 
-        staff.openInventory(inv);
-    }
+        int start = (page - 1) * perPage;
+        int end = Math.min(list.size(), start + perPage);
 
-    private static ItemStack infoItem(ShadowCrestMod plugin, Ticket t) {
-        ItemStack it = new ItemStack(Material.PAPER);
-        ItemMeta meta = it.getItemMeta();
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-        meta.setDisplayName(MessageUtil.color("&b&lTicket Infos"));
-        List<String> lore = new ArrayList<>();
-        lore.add(MessageUtil.color("&7ID: &f#" + t.getId()));
-        lore.add(MessageUtil.color("&7Status: &f" + t.getStatus().name()));
-        lore.add(MessageUtil.color("&7Ersteller: &f" + t.getCreatorName()));
-        lore.add(MessageUtil.color("&7Ziel: &f" + t.getTargetName()));
-        lore.add(MessageUtil.color("&7Grund: &f" + t.getReason()));
-        if (t.getInfo() != null && !t.getInfo().isBlank()) {
-            lore.add(MessageUtil.color("&7Info: &f" + t.getInfo()));
-        } else {
-            lore.add(MessageUtil.color("&7Info: &8-"));
+        int idx = 0;
+        for (int i = start; i < end; i++) {
+            Ticket t = list.get(i);
+
+            Material mat = (t.getStatus() == TicketStatus.OPEN) ? Material.LIME_DYE : Material.ORANGE_DYE;
+
+            List<String> lore = new ArrayList<>();
+            lore.add(MessageUtil.color("&7ID: &f#" + t.getId()));
+            lore.add(MessageUtil.color("&7Status: &f" + t.getStatus().name()));
+            lore.add(MessageUtil.color("&7Kategorie: &f" + t.getReason()));
+            lore.add(MessageUtil.color("&7Von: &f" + t.getCreatorName()));
+            lore.add(MessageUtil.color("&7Gegen: &f" + (t.getTargetName() == null ? "Unbekannt" : t.getTargetName())));
+            if (t.isClaimed()) lore.add(MessageUtil.color("&7Claimed: &f" + t.getClaimedByName()));
+            lore.add(MessageUtil.color("&7Erstellt: &f" + df.format(new Date(t.getCreatedAt()))));
+            lore.add(MessageUtil.color("&8Klick: Details öffnen"));
+
+            ItemStack it = item(mat, "&cTicket &7#" + t.getId(), lore);
+            inv.setItem(slots[idx++], it);
         }
-        if (t.isClaimed()) lore.add(MessageUtil.color("&7Claimed: &a" + t.getClaimedByName()));
 
-        meta.setLore(lore);
-        it.setItemMeta(meta);
-        return it;
+        // Controls
+        inv.setItem(45, item(Material.ARROW, "&eZurück", List.of(MessageUtil.color("&7Vorherige Seite"))));
+        inv.setItem(49, item(Material.BOOK, "&bRefresh", List.of(MessageUtil.color("&7Neu laden"))));
+        inv.setItem(53, item(Material.ARROW, "&eWeiter", List.of(MessageUtil.color("&7Nächste Seite"))));
+
+        inv.setItem(48, item(Material.PAPER, "&fTickets: &b" + list.size(), List.of(
+                MessageUtil.color("&7Seite &f" + page + "&7/&f" + maxPage)
+        )));
+
+        return inv;
     }
 
-    private static ItemStack button(Material mat, String name, List<String> lore) {
+    private static ItemStack item(Material mat, String name, List<String> lore) {
         ItemStack it = new ItemStack(mat);
-        ItemMeta meta = it.getItemMeta();
-        meta.setDisplayName(MessageUtil.color(name));
-        List<String> l = new ArrayList<>();
-        for (String s : lore) l.add(MessageUtil.color(s));
-        meta.setLore(l);
-        it.setItemMeta(meta);
+        ItemMeta im = it.getItemMeta();
+        if (im != null) {
+            im.setDisplayName(MessageUtil.color(name));
+            if (lore != null) im.setLore(lore);
+            it.setItemMeta(im);
+        }
         return it;
     }
 }

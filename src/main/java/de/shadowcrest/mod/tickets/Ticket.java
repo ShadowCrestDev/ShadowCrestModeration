@@ -10,18 +10,21 @@ public class Ticket {
     private final UUID creatorUuid;
     private final String creatorName;
 
-    private final UUID targetUuid; // kann null sein
+    private final UUID targetUuid; // kann null sein (offline/unknown)
     private final String targetName;
 
     private final String reason; // Kategorie
-    private final String info;
+    private final String info;   // Zusatzinfo
 
+    // Status
     private TicketStatus status = TicketStatus.OPEN;
 
+    // Claim-Daten
     private UUID claimedByUuid;
     private String claimedByName;
     private long claimedAt;
 
+    // Close-Daten
     private long closedAt = 0L;
     private String closedByName = null;
     private String closeReason = null;
@@ -35,7 +38,7 @@ public class Ticket {
         this.targetUuid = targetUuid;
         this.targetName = targetName;
         this.reason = reason;
-        this.info = (info == null) ? "" : info;
+        this.info = info == null ? "" : info;
     }
 
     public int getId() { return id; }
@@ -53,6 +56,7 @@ public class Ticket {
     public TicketStatus getStatus() { return status; }
     public void setStatus(TicketStatus status) { this.status = status; }
 
+    // Claim
     public boolean isClaimed() { return status == TicketStatus.CLAIMED; }
     public UUID getClaimedByUuid() { return claimedByUuid; }
     public String getClaimedByName() { return claimedByName == null ? "Unknown" : claimedByName; }
@@ -65,6 +69,11 @@ public class Ticket {
         this.status = TicketStatus.CLAIMED;
     }
 
+    public void setClaimedByUuid(UUID claimedByUuid) { this.claimedByUuid = claimedByUuid; }
+    public void setClaimedByName(String claimedByName) { this.claimedByName = claimedByName; }
+    public void setClaimedAt(long claimedAt) { this.claimedAt = claimedAt; }
+
+    // Close
     public boolean isClosed() { return status == TicketStatus.CLOSED; }
     public long getClosedAt() { return closedAt; }
     public String getClosedByName() { return closedByName; }
@@ -74,6 +83,10 @@ public class Ticket {
         this.status = TicketStatus.CLOSED;
         this.closedAt = System.currentTimeMillis();
         this.closedByName = staffName;
-        this.closeReason = (reason == null) ? "" : reason;
+        this.closeReason = (reason == null ? "" : reason);
     }
+
+    public void setClosedAt(long closedAt) { this.closedAt = closedAt; }
+    public void setClosedByName(String closedByName) { this.closedByName = closedByName; }
+    public void setCloseReason(String closeReason) { this.closeReason = closeReason; }
 }

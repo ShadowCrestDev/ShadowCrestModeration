@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import de.shadowcrest.mod.tickets.gui.StaffTicketGui;
+import org.bukkit.entity.Player;
 
 public class ScmCommand implements CommandExecutor {
 
@@ -49,6 +51,22 @@ public class ScmCommand implements CommandExecutor {
                     "messages.scm_info",
                     MessageUtil.ph("version", ver, "author", author)
             ));
+            return true;
+        }
+// /scm gui
+        if (args[0].equalsIgnoreCase("gui") || args[0].equalsIgnoreCase("staff")) {
+            if (!sender.hasPermission("shadowcrest.mod.ticket.gui")) {
+                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
+                return true;
+            }
+
+            if (!(sender instanceof Player p)) {
+                sender.sendMessage("Only players can use the GUI.");
+                return true;
+            }
+
+            // Seite 0 = erste Seite
+            p.openInventory(StaffTicketGui.build(plugin, 0));
             return true;
         }
 
@@ -133,37 +151,6 @@ public class ScmCommand implements CommandExecutor {
             staff.teleport(creator.getLocation());
             staff.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") +
                     "&aTeleportiert zu &f" + creator.getName() + "&a (Ticket #" + id + ")"));
-            return true;
-        }
-// /scm ticket <id>  (öffnet Staff-GUI)
-        if (args[0].equalsIgnoreCase("ticket")) {
-            if (!sender.hasPermission("shadowcrest.mod.ticket.gui")) {
-                sender.sendMessage(MessageUtil.msg(plugin, "messages.no_permission"));
-                return true;
-            }
-            if (!(sender instanceof org.bukkit.entity.Player staff)) {
-                sender.sendMessage("Only players can open GUI.");
-                return true;
-            }
-            if (args.length < 2) {
-                sender.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") + "&cNutze: /scm ticket <id>"));
-                return true;
-            }
-
-            int id;
-            try { id = Integer.parseInt(args[1]); }
-            catch (Exception ex) {
-                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
-                return true;
-            }
-
-            var t = plugin.getTicketManager().getTicket(id);
-            if (t == null) {
-                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_found"));
-                return true;
-            }
-
-            de.shadowcrest.mod.tickets.gui.StaffTicketGui.open(plugin, staff, t);
             return true;
         }
 
