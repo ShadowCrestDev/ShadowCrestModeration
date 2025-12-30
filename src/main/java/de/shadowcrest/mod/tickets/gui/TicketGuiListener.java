@@ -3,6 +3,7 @@ package de.shadowcrest.mod.tickets.gui;
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.tickets.TicketSession;
 import de.shadowcrest.mod.util.MessageUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,11 @@ public class TicketGuiListener implements Listener {
         String name = e.getCurrentItem().getItemMeta().getDisplayName();
         if (name == null || name.isBlank()) return;
 
-        String categoryPlain = MessageUtil.color(name).replace("§", "");
+        // ✅ Farbcodes korrekt entfernen
+        String categoryPlain = ChatColor.stripColor(MessageUtil.color(name));
+        if (categoryPlain == null) return;
+
+        // optional: nur Buchstaben + Leerzeichen
         categoryPlain = categoryPlain.replaceAll("[^A-Za-zÄÖÜäöüß ]", "").trim();
 
         TicketSession session = new TicketSession();

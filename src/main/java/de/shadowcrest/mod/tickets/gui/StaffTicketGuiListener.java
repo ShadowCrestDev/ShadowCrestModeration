@@ -134,12 +134,30 @@ public class StaffTicketGuiListener implements Listener {
 
             if (itemName.contains("Claim")) {
                 if (!t.isClosed()) {
+
+                    // schon geclaimed? dann nix oder Hinweis (optional)
+                    // if (t.isClaimed()) { p.sendMessage(MessageUtil.color("&cDieses Ticket ist bereits geclaimed.")); return; }
+
                     t.claim(p.getUniqueId(), p.getName());
                     plugin.getTicketManager().save();
+
+                    // ✅ gleiche Notify-Message wie /scm accept
+                    String claimed = MessageUtil.format(
+                            plugin,
+                            "messages.staff_ticket_claimed",
+                            MessageUtil.ph("id", t.getId(), "staff", p.getName())
+                    );
+
+                    MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
+
+                    // optional: falls du sicher willst, dass der Klicker es IMMER sieht
+                    p.sendMessage(claimed);
                 }
+
                 p.openInventory(StaffTicketDetailGui.build(plugin, t));
                 return;
             }
+
 
             if (itemName.contains("Unclaim")) {
                 if (!t.isClosed()) {

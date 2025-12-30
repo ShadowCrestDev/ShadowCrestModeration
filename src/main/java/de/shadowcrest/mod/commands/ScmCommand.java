@@ -77,40 +77,41 @@ public class ScmCommand implements CommandExecutor {
                 return true;
             }
 
+            // Nur Player sollen GUI bekommen
+            if (!(sender instanceof org.bukkit.entity.Player staff)) {
+                sender.sendMessage("Only players can accept tickets via GUI.");
+                return true;
+            }
+
             var next = plugin.getTicketManager().getNextOpenTicket();
             if (next == null) {
-                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_no_tickets"));
+                staff.sendMessage(MessageUtil.msg(plugin, "messages.staff_no_tickets"));
                 return true;
             }
 
             // safety
             if (next.getStatus() != de.shadowcrest.mod.tickets.TicketStatus.OPEN) {
-                sender.sendMessage(MessageUtil.msg(plugin, "messages.staff_no_tickets"));
+                staff.sendMessage(MessageUtil.msg(plugin, "messages.staff_no_tickets"));
                 return true;
             }
 
-            String staffName = sender.getName();
-            java.util.UUID staffUuid = (sender instanceof org.bukkit.entity.Player sp) ? sp.getUniqueId() : null;
-
-            next.claim(staffUuid, staffName);
+            next.claim(staff.getUniqueId(), staff.getName());
             plugin.getTicketManager().save();
 
             String claimed = MessageUtil.format(
                     plugin,
                     "messages.staff_ticket_claimed",
-                    MessageUtil.ph("id", next.getId(), "staff", staffName)
+                    MessageUtil.ph("id", next.getId(), "staff", staff.getName())
             );
 
+            // Staff Notify wie bisher
             MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
 
-            sender.sendMessage(claimed);
-            sender.sendMessage(MessageUtil.color(
-                    plugin.getConfig().getString("prefix", "") +
-                            "&e➡ &7Nutze: &f/scm tpticket " + next.getId()
-            ));
-
+            // ✅ Direkt Detail-GUI öffnen
+            staff.openInventory(de.shadowcrest.mod.tickets.gui.StaffTicketDetailGui.build(plugin, next));
             return true;
         }
+
 
         // /scm tpticket <id>
         if (args[0].equalsIgnoreCase("tpticket")) {

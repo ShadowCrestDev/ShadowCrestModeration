@@ -41,7 +41,7 @@ public class PlayerSelectGuiListener implements Listener {
         String display = e.getCurrentItem().getItemMeta().getDisplayName();
         if (display == null || display.isBlank()) return;
 
-        String targetName = MessageUtil.color(display).replace("§", "").trim();
+        String targetName = org.bukkit.ChatColor.stripColor(MessageUtil.color(display)).trim();
 
         // Session existiert bereits (kommt aus TicketGuiListener) – wir füllen nur target
         TicketSession session = plugin.getTicketManager().getSessions().get(p.getUniqueId());
