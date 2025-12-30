@@ -12,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.shadowcrest.mod.tickets.gui.PlayerSelectGuiListener;
 import de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener;
 import de.shadowcrest.mod.tickets.listeners.StaffTicketCloseChatListener;
+import de.shadowcrest.mod.tickets.gui.OfflinePlayerSelectGuiListener;
+
 
 
 
@@ -24,6 +26,7 @@ public class ShadowCrestMod extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        getLogger().info("SCM DEBUG: Loaded jar build " + getDescription().getVersion() + " / " + System.currentTimeMillis());
 
         // Tickets
         this.ticketManager = new TicketManager(this);
@@ -61,7 +64,8 @@ public class ShadowCrestMod extends JavaPlugin {
         // Staff Ticket GUI
         getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new StaffTicketCloseChatListener(this), this);
-        getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new OfflinePlayerSelectGuiListener(this), this);
+
 
 
 

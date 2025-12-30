@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,42 +17,63 @@ public final class PlayerSelectGui {
 
     private PlayerSelectGui() {}
 
+    // Slots im Innenbereich (ohne Rand), 4 Reihen á 7 Slots = 28 Köpfe
+    private static final int[] HEAD_SLOTS = {
+            10,11,12,13,14,15,16,
+            19,20,21,22,23,24,25,
+            28,29,30,31,32,33,34,
+            37,38,39,40,41,42,43
+    };
+
     public static Inventory build(ShadowCrestMod plugin, Player viewer) {
         String title = MessageUtil.color("&8SCM &7Spieler auswählen");
         Inventory inv = Bukkit.createInventory(null, 54, title);
 
-        // Deko-Rand (optional, aber sieht besser aus)
+        // Rand-Deko
         ItemStack glass = item(Material.GRAY_STAINED_GLASS_PANE, " ", null);
         for (int i = 0; i < inv.getSize(); i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) inv.setItem(i, glass);
         }
 
-        int slot = 10;
+        // Buttons (fixe Plätze, damit die niemals überschrieben werden)
+        inv.setItem(49, item(Material.BARRIER, "&cZurück", List.of("&7Zurück zur Ticket-Auswahl")));
+        inv.setItem(48, item(Material.BOOK, "&eOffline Spieler anzeigen", List.of("&7Zeigt Spieler, die gerade offline sind")));
+        inv.setItem(50, item(Material.NAME_TAG, "&cName nicht bekannt", List.of("&7Du weißt nicht, wer es war.", "&7Ticket wird ohne Ziel erstellt")));
+
+        // Köpfe setzen (auf freie Slots, Buttons werden übersprungen)
+        int idx = 0;
+        int online = 0;
+
         for (Player target : Bukkit.getOnlinePlayers()) {
-            if (slot >= 44) break; // Platz begrenzt (innenbereich)
+            online++;
 
-            // überspringe Rand-Slots automatisch
-            while (slot % 9 == 0 || slot % 9 == 8) slot++;
+            // Optional: sich selbst nicht reporten
+            // if (target.getUniqueId().equals(viewer.getUniqueId())) continue;
 
-            ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-            SkullMeta meta = (SkullMeta) head.getItemMeta();
+            while (idx < HEAD_SLOTS.length) {
+                int slot = HEAD_SLOTS[idx++];
+                // Buttons nicht überschreiben
+                if (slot == 22 || slot == 23) continue;
 
-            if (meta != null) {
-                meta.setOwningPlayer(target);
-                meta.setDisplayName(MessageUtil.color("&e" + target.getName()));
-                meta.setLore(List.of(
-                        MessageUtil.color("&7Klicken um diesen Spieler zu reporten")
-                ));
-                head.setItemMeta(meta);
+                ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+                ItemMeta im = head.getItemMeta();
+
+                if (im instanceof SkullMeta meta) {
+                    meta.setOwningPlayer(target);
+                    meta.setDisplayName(MessageUtil.color("&e" + target.getName()));
+                    meta.setLore(List.of(MessageUtil.color("&7Klicken um diesen Spieler zu reporten")));
+                    head.setItemMeta(meta);
+                }
+
+                inv.setItem(slot, head);
+                break;
             }
 
-
-            inv.setItem(slot, head);
-            slot++;
+            if (idx >= HEAD_SLOTS.length) break;
         }
 
-        // Zurück-Button
-        inv.setItem(49, item(Material.BARRIER, "&cZurück", List.of("&7Zurück zur Ticket-Auswahl")));
+        // Debug (siehst du in der Konsole)
+        plugin.getLogger().info("PlayerSelectGui: onlinePlayers=" + online + ", headsPlaced=" + Math.min(online, HEAD_SLOTS.length));
 
         return inv;
     }

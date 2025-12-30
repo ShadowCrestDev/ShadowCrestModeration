@@ -19,31 +19,55 @@ public final class StaffTicketDetailGui {
     private StaffTicketDetailGui() {}
 
     public static Inventory build(ShadowCrestMod plugin, Ticket t) {
-        String base = MessageUtil.color(plugin.getConfig().getString("messages.staff_ticket_detail_title", "&8SCM &cTicket"));
-        String title = base + MessageUtil.color(" &7#" + t.getId());
+        String title = MessageUtil.color(plugin.getConfig().getString(
+                "messages.staff_ticket_detail_title", "&8SCM &cTicket"
+        )) + " #" + t.getId();
 
         Inventory inv = Bukkit.createInventory(null, 27, title);
 
-        // Info Item
-        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        // dunkler Rand
+        ItemStack glass = item(Material.BLACK_STAINED_GLASS_PANE, " ", null);
+        for (int i = 0; i < inv.getSize(); i++) {
+            if (i < 9 || i >= 18 || i % 9 == 0 || i % 9 == 8) inv.setItem(i, glass);
+        }
+
+        // Info-Paper in die Mitte
         List<String> lore = new ArrayList<>();
-        lore.add(MessageUtil.color("&7Status: &f" + t.getStatus().name()));
-        lore.add(MessageUtil.color("&7Kategorie: &f" + t.getReason()));
-        lore.add(MessageUtil.color("&7Von: &f" + t.getCreatorName()));
-        lore.add(MessageUtil.color("&7Gegen: &f" + (t.getTargetName() == null ? "Unbekannt" : t.getTargetName())));
-        lore.add(MessageUtil.color("&7Info: &f" + (t.getInfo().isBlank() ? "-" : t.getInfo())));
-        lore.add(MessageUtil.color("&7Erstellt: &f" + df.format(new Date(t.getCreatedAt()))));
-        if (t.isClaimed()) lore.add(MessageUtil.color("&7Claimed: &f" + t.getClaimedByName()));
+        lore.add("&7Ersteller: &f" + t.getCreatorName());
+        lore.add("&7Ziel: &f" + (t.getTargetName() == null ? "Unbekannt" : t.getTargetName()));
+        lore.add("&7Kategorie: &f" + t.getReason());
+        lore.add("&7Info: &f" + (t.getInfo().isBlank() ? "-" : t.getInfo()));
+        lore.add("&7Status: &f" + t.getStatus().name());
+        if (t.isClaimed()) lore.add("&7Claimed von: &f" + t.getClaimedByName());
+        lore.add("&7Erstellt: &f" + formatTime(t.getCreatedAt()));
 
-        inv.setItem(13, item(Material.PAPER, "&cTicket &7#" + t.getId(), lore));
+        inv.setItem(13, item(Material.PAPER, "&fTicket #" + t.getId(), lore));
 
-        inv.setItem(10, item(Material.LIME_CONCRETE, "&aClaim", List.of(MessageUtil.color("&7Ticket übernehmen"))));
-        inv.setItem(11, item(Material.YELLOW_CONCRETE, "&eUnclaim", List.of(MessageUtil.color("&7Claim entfernen"))));
-        inv.setItem(16, item(Material.RED_CONCRETE, "&cClose", List.of(MessageUtil.color("&7Ticket schließen (Reason im Chat)"))));
+        // Claim / Unclaim
+        if (t.isClaimed()) {
+            inv.setItem(11, item(Material.LIME_WOOL, "&aUnclaim", List.of("&7Ticket wieder freigeben")));
+        } else {
+            inv.setItem(11, item(Material.LIME_WOOL, "&aClaim", List.of("&7Ticket annehmen")));
+        }
 
-        inv.setItem(22, item(Material.ARROW, "&7Zurück", List.of(MessageUtil.color("&7Zur Ticketliste"))));
+        // Teleport
+        inv.setItem(15, item(Material.ENDER_PEARL, "&bTeleport", List.of("&7Zum Ersteller teleportieren")));
+
+        // Close
+        inv.setItem(16, item(Material.RED_WOOL, "&cClose", List.of("&7Ticket schließen (Grund im Chat)")));
+
+        // Zurück
+        inv.setItem(22, item(Material.BARRIER, "&cZurück", List.of("&7Zurück zur Übersicht")));
 
         return inv;
+    }
+
+    private static String formatTime(long ms) {
+        try {
+            return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date(ms));
+        } catch (Exception e) {
+            return String.valueOf(ms);
+        }
     }
 
     private static ItemStack item(Material mat, String name, List<String> lore) {
@@ -51,7 +75,11 @@ public final class StaffTicketDetailGui {
         ItemMeta im = it.getItemMeta();
         if (im != null) {
             im.setDisplayName(MessageUtil.color(name));
-            if (lore != null) im.setLore(lore);
+            if (lore != null) {
+                List<String> colored = new ArrayList<>();
+                for (String l : lore) colored.add(MessageUtil.color(l));
+                im.setLore(colored);
+            }
             it.setItemMeta(im);
         }
         return it;

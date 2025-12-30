@@ -131,6 +131,18 @@ public class StaffTicketGuiListener implements Listener {
                 p.openInventory(StaffTicketGui.build(plugin, p, 1));
                 return;
             }
+        //TELEPORT BUTTON
+            if (itemName.contains("Teleport")) {
+                var creator = org.bukkit.Bukkit.getPlayer(t.getCreatorUuid());
+                if (creator == null) {
+                    p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_creator_offline"));
+                    return;
+                }
+                p.teleport(creator.getLocation());
+                p.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") +
+                        "&aTeleportiert zu &f" + creator.getName() + "&a (Ticket #" + t.getId() + ")"));
+                return;
+            }
 
             if (itemName.contains("Claim")) {
                 if (!t.isClosed()) {
