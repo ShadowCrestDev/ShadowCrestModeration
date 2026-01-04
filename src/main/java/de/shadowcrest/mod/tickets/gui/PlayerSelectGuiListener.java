@@ -38,21 +38,23 @@ public class PlayerSelectGuiListener implements Listener {
         }
 
         int slot = e.getRawSlot();
+        Material type = e.getCurrentItem().getType();
 
         // Buttons (fixe Slots, sprachneutral)
-        if (slot == 49 && e.getCurrentItem().getType() == Material.BARRIER) {
+        if (slot == 49 && type == Material.BARRIER) {
             p.openInventory(TicketGui.build(plugin));
             return;
         }
 
-        if (slot == 48 && e.getCurrentItem().getType() == Material.BOOK) {
+        if (slot == 48 && type == Material.BOOK) {
             plugin.getTicketManager().getSessions().put(p.getUniqueId(), session);
             p.openInventory(OfflinePlayerSelectGui.build(plugin, p, 1));
             return;
         }
 
-        if (slot == 50 && e.getCurrentItem().getType() == Material.NAME_TAG) {
-            session.setTargetName("Unbekannt"); // optional später lokalisieren
+        // Name nicht bekannt (Slot 50)
+        if (slot == 50 && type == Material.NAME_TAG) {
+            session.setTargetName(plugin.getLang().get("messages.ticket_target_unknown"));
             session.setTargetUuid(null);
             session.setStep(TicketSession.Step.INFO);
 
@@ -63,14 +65,16 @@ public class PlayerSelectGuiListener implements Listener {
         }
 
         // Nur Player-Head klickbar
-        if (e.getCurrentItem().getType() != Material.PLAYER_HEAD) return;
+        if (type != Material.PLAYER_HEAD) return;
 
         // Target-Name über Skull Owner holen (robuster als DisplayName)
         Player target = null;
         var meta = e.getCurrentItem().getItemMeta();
         if (meta instanceof org.bukkit.inventory.meta.SkullMeta skullMeta) {
             var owning = skullMeta.getOwningPlayer();
-            if (owning != null) target = Bukkit.getPlayerExact(owning.getName());
+            if (owning != null && owning.getName() != null) {
+                target = Bukkit.getPlayerExact(owning.getName());
+            }
         }
 
         if (target == null) {
@@ -78,6 +82,7 @@ public class PlayerSelectGuiListener implements Listener {
             return;
         }
 
+        // Selbst reporten verhindern
         if (target.getUniqueId().equals(p.getUniqueId())) {
             p.sendMessage(MessageUtil.msg(plugin, "messages.ticket_cannot_report_self"));
             return;

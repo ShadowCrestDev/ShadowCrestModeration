@@ -80,7 +80,7 @@ messages:
     - "abort"
   staff_ticket_close_cancelled: "{prefix}&7Cancelled."
   staff_ticket_closed_done: "{prefix}&aTicket #{id} has been closed."
-
+  ticket_target_unknown: "Unknown"
 
 
   staff_action:

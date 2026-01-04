@@ -61,6 +61,7 @@ messages:
   ticket_playerselect_title: "&8SCM &7Spieler auswählen"
   ticket_player_not_found_in_gui: "{prefix}&cSpieler nicht gefunden (vielleicht offline)."
   ticket_cannot_report_self: "{prefix}&cDu kannst dich nicht selbst reporten."
+  ticket_target_unknown: "Unbekannt"
 
 
   staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
