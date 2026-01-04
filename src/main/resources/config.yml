@@ -1,6 +1,9 @@
 language: en_US
 prefix: "&8[&5ShadowCrest&8] &r"
 
+join_log:
+  enabled: true
+
 tickets:
   enabled: true
   cooldown_seconds: 30

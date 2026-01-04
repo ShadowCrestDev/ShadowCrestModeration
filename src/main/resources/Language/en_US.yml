@@ -269,15 +269,17 @@ messages:
         lore_click: "&7Click = close"
         lore_reason: "&8Reason: &f{reason}"
 
-  join_log:
-    format: |
-      &8&m--------------------------------
-      &5Join Log: &f{player}
-      &7Warnings: &f{warns}
-      &7Playtime: &f{playtime}
-      &7Latest warnings:
-      {warn_list}
-      &8&m--------------------------------
-  warn_list_format: " &8- &f{date} &7| &f{reason}"
-  warn_list_empty: " &8- &7None"
+join_log:
+  format: |
+    &8&m--------------------------------
+    &5Join Log: &f{player}
+    &7Warnings: &f{warns}
+    &7Playtime: &f{playtime}
+    &7Latest warnings:
+    {warn_list}
+    &8&m--------------------------------
+
+warn_list_format: " &8- &f{date} &7| &f{reason}"
+warn_list_empty: " &8- &7None"
+
 

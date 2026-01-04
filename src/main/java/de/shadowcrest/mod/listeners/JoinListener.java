@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Map;
+
 public class JoinListener implements Listener {
 
     private final ShadowCrestMod plugin;
@@ -22,24 +24,21 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         try {
-            plugin.getLogger().info("JoinListener fired for " + e.getPlayer().getName());
+            Player p = e.getPlayer();
 
-            boolean enabled = plugin.getConfig().getBoolean("messages.join_log.enabled", true);
+            // ✅ Wenn du später togglen willst, mach dafür einen config bool:
+            // join_log.enabled: true
+            boolean enabled = plugin.getConfig().getBoolean("join_log.enabled", true);
             if (!enabled) return;
 
-            Player p = e.getPlayer();
             PlayerData data = plugin.getDataManager().load(p.getUniqueId());
 
-            int max = plugin.getConfig().getInt("storage.max_warn_list_on_join", 5);
+            // ✅ richtiger Pfad aus deiner config.yml
+            int max = plugin.getConfig().getInt("warn_settings.storage.max_warn_list_on_join", 5);
 
-            String listFormat = plugin.getConfig().getString(
-                    "messages.warn_list_format",
-                    " &8- &f{date} &7| &f{reason}"
-            );
-            String listEmpty = plugin.getConfig().getString(
-                    "messages.warn_list_empty",
-                    " &8- &7Keine"
-            );
+            // ✅ aus Language (nicht config)
+            String listFormat = plugin.getLang().get("warn_list_format");
+            String listEmpty = plugin.getLang().get("warn_list_empty");
 
             String warnList;
             if (data.getWarnHistory().isEmpty()) {
@@ -59,24 +58,27 @@ public class JoinListener implements Listener {
                 warnList = sb.toString().trim();
             }
 
-            String formatted = plugin.getConfig().getString("messages.join_log.format", "")
-                    .replace("{prefix}", plugin.getConfig().getString("prefix", ""))
-                    .replace("{player}", p.getName())
-                    .replace("{warns}", String.valueOf(data.getWarns()))
-                    .replace("{warn_list}", warnList);
-
-            boolean showPlaytime = plugin.getConfig().getBoolean("playtime.show_in_join_log", true);
+            // ✅ Playtime Pfade aus deiner config.yml
+            boolean showPlaytime = plugin.getConfig().getBoolean("warn_settings.playtime.show_in_join_log", true);
+            String playtime = "";
             if (showPlaytime) {
                 long ticks = PlaytimeUtil.getPlayTicks(p);
-                String fmt = plugin.getConfig().getString("playtime.format", "{days}d {hours}h {minutes}m");
-                String playtime = PlaytimeUtil.formatPlaytime(ticks, fmt);
-                formatted = formatted.replace("{playtime}", playtime);
-            } else {
-                formatted = formatted.replace("{playtime}", "");
+                String fmt = plugin.getConfig().getString("warn_settings.playtime.format", "{days}d {hours}h {minutes}m");
+                playtime = PlaytimeUtil.formatPlaytime(ticks, fmt);
             }
 
-            String colored = MessageUtil.color(formatted);
-            String[] lines = colored.split("\\r?\\n");
+            // ✅ JoinLog Format aus Language
+            String formatted = plugin.getLang().get(
+                    "join_log.format",
+                    Map.of(
+                            "player", p.getName(),
+                            "warns", String.valueOf(data.getWarns()),
+                            "playtime", playtime,
+                            "warn_list", warnList
+                    )
+            );
+
+            String[] lines = formatted.split("\\r?\\n");
 
             int sent = 0;
             for (Player staff : Bukkit.getOnlinePlayers()) {
