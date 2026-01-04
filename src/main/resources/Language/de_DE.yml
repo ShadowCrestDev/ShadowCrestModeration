@@ -59,6 +59,9 @@ messages:
   ticket_closed_user: "{prefix}&7Dein Ticket &f#{id} &7wurde geschlossen von &f{staff}&7. Grund: &f{reason}"
   ticket_player_gui_title: "&8SCM &7Spieler wählen"
   ticket_playerselect_title: "&8SCM &7Spieler auswählen"
+  ticket_player_not_found_in_gui: "{prefix}&cSpieler nicht gefunden (vielleicht offline)."
+  ticket_cannot_report_self: "{prefix}&cDu kannst dich nicht selbst reporten."
+
 
   staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &abeansprucht!"
@@ -99,6 +102,32 @@ messages:
           name: "&bSonstiges"
           lore:
             - "&7Andere Probleme"
+    player_select:
+      title: "&8SCM &7Spieler auswählen"
+
+      border:
+        name: " "
+
+      button:
+        back:
+          name: "&cZurück"
+          lore:
+            - "&7Zurück zur Ticket-Auswahl"
+        offline:
+          name: "&eOffline Spieler anzeigen"
+          lore:
+            - "&7Zeigt Spieler, die gerade offline sind"
+        unknown:
+          name: "&cName nicht bekannt"
+          lore:
+            - "&7Du weißt nicht, wer es war."
+            - "&7Ticket wird ohne Ziel erstellt"
+
+      player_head:
+        name: "&e{player}"
+        lore:
+          - "&7Klicken um diesen Spieler zu reporten"
+
 
   join_log:
     format: |

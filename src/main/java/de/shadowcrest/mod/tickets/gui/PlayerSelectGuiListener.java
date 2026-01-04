@@ -4,7 +4,6 @@ import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.tickets.TicketSession;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +22,7 @@ public class PlayerSelectGuiListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        String title = MessageUtil.color("&8SCM &7Spieler auswählen");
+        String title = plugin.getLang().get("messages.gui.player_select.title");
         if (e.getView().getTitle() == null || !e.getView().getTitle().equals(title)) return;
 
         e.setCancelled(true);
@@ -31,32 +30,29 @@ public class PlayerSelectGuiListener implements Listener {
         if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
         if (e.getCurrentItem().getItemMeta() == null) return;
 
-        String rawName = e.getCurrentItem().getItemMeta().getDisplayName();
-        String itemName = rawName == null ? "" : ChatColor.stripColor(rawName).trim(); // ✅ sauber
-
-        // Session holen (kommt aus TicketGuiListener)
+        // Session holen
         TicketSession session = plugin.getTicketManager().getSessions().get(p.getUniqueId());
         if (session == null) {
             session = new TicketSession();
             session.setStep(TicketSession.Step.TARGET);
         }
 
-        // Zurück
-        if (e.getCurrentItem().getType() == Material.BARRIER) {
+        int slot = e.getRawSlot();
+
+        // Buttons (fixe Slots, sprachneutral)
+        if (slot == 49 && e.getCurrentItem().getType() == Material.BARRIER) {
             p.openInventory(TicketGui.build(plugin));
             return;
         }
 
-        // Offline Spieler anzeigen (Button)
-        if (itemName.equalsIgnoreCase("Offline Spieler anzeigen")) {
+        if (slot == 48 && e.getCurrentItem().getType() == Material.BOOK) {
             plugin.getTicketManager().getSessions().put(p.getUniqueId(), session);
             p.openInventory(OfflinePlayerSelectGui.build(plugin, p, 1));
             return;
         }
 
-        // Name nicht bekannt (Button)
-        if (itemName.equalsIgnoreCase("Name nicht bekannt")) {
-            session.setTargetName("Unbekannt");
+        if (slot == 50 && e.getCurrentItem().getType() == Material.NAME_TAG) {
+            session.setTargetName("Unbekannt"); // optional später lokalisieren
             session.setTargetUuid(null);
             session.setStep(TicketSession.Step.INFO);
 
@@ -66,23 +62,24 @@ public class PlayerSelectGuiListener implements Listener {
             return;
         }
 
-        // Nur Player-Head klickbar (Online)
+        // Nur Player-Head klickbar
         if (e.getCurrentItem().getType() != Material.PLAYER_HEAD) return;
 
-        String display = rawName;
-        if (display == null || display.isBlank()) return;
+        // Target-Name über Skull Owner holen (robuster als DisplayName)
+        Player target = null;
+        var meta = e.getCurrentItem().getItemMeta();
+        if (meta instanceof org.bukkit.inventory.meta.SkullMeta skullMeta) {
+            var owning = skullMeta.getOwningPlayer();
+            if (owning != null) target = Bukkit.getPlayerExact(owning.getName());
+        }
 
-        String targetName = ChatColor.stripColor(display).trim(); // ✅ wichtig
-
-        Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            p.sendMessage(MessageUtil.color("&cSpieler nicht gefunden (vielleicht offline)."));
+            p.sendMessage(MessageUtil.msg(plugin, "messages.ticket_player_not_found_in_gui"));
             return;
         }
 
-        // ❌ Selbst reporten verhindern
         if (target.getUniqueId().equals(p.getUniqueId())) {
-            p.sendMessage(MessageUtil.color("&cDu kannst dich nicht selbst reporten."));
+            p.sendMessage(MessageUtil.msg(plugin, "messages.ticket_cannot_report_self"));
             return;
         }
 

@@ -59,6 +59,9 @@ messages:
   ticket_closed_user: "{prefix}&7Your ticket &f#{id} &7has been closed by &f{staff}&7. Reason: &f{reason}"
   ticket_player_gui_title: "&8SCM &7Select player"
   ticket_playerselect_title: "&8SCM &7Select player"
+  ticket_player_not_found_in_gui: "{prefix}&cPlayer not found (maybe offline)."
+  ticket_cannot_report_self: "{prefix}&cYou cannot report yourself."
+
 
   staff_ticket_hint: "{prefix}&7Use: &f/scm accept &7to claim the next ticket."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &ahas been claimed by &f{staff}&a!"
@@ -101,6 +104,31 @@ messages:
           name: "&bOther"
           lore:
             - "&7Other issues"
+    player_select:
+      title: "&8SCM &7Select player"
+
+      border:
+        name: " "
+
+      button:
+        back:
+          name: "&cBack"
+          lore:
+            - "&7Back to ticket selection"
+        offline:
+          name: "&eShow offline players"
+          lore:
+            - "&7Shows players who are currently offline"
+        unknown:
+          name: "&cName unknown"
+          lore:
+            - "&7You don't know who it was."
+            - "&7Ticket will be created without a target"
+
+      player_head:
+        name: "&e{player}"
+        lore:
+          - "&7Click to report this player"
 
   join_log:
     format: |

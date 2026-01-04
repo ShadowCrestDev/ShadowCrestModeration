@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public final class PlayerSelectGui {
 
@@ -26,33 +27,42 @@ public final class PlayerSelectGui {
     };
 
     public static Inventory build(ShadowCrestMod plugin, Player viewer) {
-        String title = MessageUtil.color("&8SCM &7Spieler auswählen");
+        String title = plugin.getLang().get("messages.gui.player_select.title");
         Inventory inv = Bukkit.createInventory(null, 54, title);
 
         // Rand-Deko
-        ItemStack glass = item(Material.GRAY_STAINED_GLASS_PANE, " ", null);
+        ItemStack glass = item(Material.GRAY_STAINED_GLASS_PANE,
+                plugin.getLang().get("messages.gui.player_select.border.name"),
+                null);
+
         for (int i = 0; i < inv.getSize(); i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) inv.setItem(i, glass);
         }
 
-        // Buttons (fixe Plätze, damit die niemals überschrieben werden)
-        inv.setItem(49, item(Material.BARRIER, "&cZurück", List.of("&7Zurück zur Ticket-Auswahl")));
-        inv.setItem(48, item(Material.BOOK, "&eOffline Spieler anzeigen", List.of("&7Zeigt Spieler, die gerade offline sind")));
-        inv.setItem(50, item(Material.NAME_TAG, "&cName nicht bekannt", List.of("&7Du weißt nicht, wer es war.", "&7Ticket wird ohne Ziel erstellt")));
+        // Buttons
+        inv.setItem(49, item(Material.BARRIER,
+                plugin.getLang().get("messages.gui.player_select.button.back.name"),
+                plugin.getLang().getStringList("messages.gui.player_select.button.back.lore")));
 
-        // Köpfe setzen (auf freie Slots, Buttons werden übersprungen)
+        inv.setItem(48, item(Material.BOOK,
+                plugin.getLang().get("messages.gui.player_select.button.offline.name"),
+                plugin.getLang().getStringList("messages.gui.player_select.button.offline.lore")));
+
+        inv.setItem(50, item(Material.NAME_TAG,
+                plugin.getLang().get("messages.gui.player_select.button.unknown.name"),
+                plugin.getLang().getStringList("messages.gui.player_select.button.unknown.lore")));
+
+        // Köpfe setzen
         int idx = 0;
         int online = 0;
 
         for (Player target : Bukkit.getOnlinePlayers()) {
             online++;
 
-            // Optional: sich selbst nicht reporten
-            // if (target.getUniqueId().equals(viewer.getUniqueId())) continue;
-
             while (idx < HEAD_SLOTS.length) {
                 int slot = HEAD_SLOTS[idx++];
-                // Buttons nicht überschreiben
+
+                // Buttons nicht überschreiben (Sicherheit)
                 if (slot == 22 || slot == 23) continue;
 
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
@@ -60,8 +70,17 @@ public final class PlayerSelectGui {
 
                 if (im instanceof SkullMeta meta) {
                     meta.setOwningPlayer(target);
-                    meta.setDisplayName(MessageUtil.color("&e" + target.getName()));
-                    meta.setLore(List.of(MessageUtil.color("&7Klicken um diesen Spieler zu reporten")));
+
+                    String headName = plugin.getLang().get(
+                            "messages.gui.player_select.player_head.name",
+                            Map.of("player", target.getName())
+                    );
+
+                    meta.setDisplayName(MessageUtil.color(headName));
+
+                    List<String> lore = plugin.getLang().getStringList("messages.gui.player_select.player_head.lore");
+                    meta.setLore(lore.stream().map(MessageUtil::color).toList());
+
                     head.setItemMeta(meta);
                 }
 
@@ -72,9 +91,7 @@ public final class PlayerSelectGui {
             if (idx >= HEAD_SLOTS.length) break;
         }
 
-        // Debug (siehst du in der Konsole)
         plugin.getLogger().info("PlayerSelectGui: onlinePlayers=" + online + ", headsPlaced=" + Math.min(online, HEAD_SLOTS.length));
-
         return inv;
     }
 

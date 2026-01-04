@@ -21,7 +21,8 @@ public class TicketGuiListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        String title = MessageUtil.color(plugin.getConfig().getString("messages.ticket_gui_title", "&8SCM &7Tickets"));
+        // ✅ Titel aus Language
+        String title = plugin.getLang().get("messages.ticket_gui_title");
         if (e.getView().getTitle() == null || !e.getView().getTitle().equals(title)) return;
 
         e.setCancelled(true);
@@ -41,7 +42,6 @@ public class TicketGuiListener implements Listener {
         TicketSession session = new TicketSession();
         session.setCategory(categoryPlain);
 
-        // Nächster Step: Spieler auswählen per GUI
         session.setStep(TicketSession.Step.TARGET);
         plugin.getTicketManager().getSessions().put(p.getUniqueId(), session);
 
