@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public final class OfflinePlayerSelectGui {
 
@@ -25,11 +26,20 @@ public final class OfflinePlayerSelectGui {
     public static Inventory build(ShadowCrestMod plugin, Player viewer, int page) {
         if (page < 1) page = 1;
 
-        String title = MessageUtil.color("&8SCM &7Offline Spieler &8- &7Seite &e" + page);
+        // ✅ Titel aus Language (mit Platzhalter {page})
+        String title = plugin.getLang().get(
+                "messages.gui.offline_player_select.title",
+                Map.of("page", String.valueOf(page))
+        );
         Inventory inv = Bukkit.createInventory(null, 54, title);
 
-        // Deko-Rand (wie bei PlayerSelectGui)
-        ItemStack glass = item(Material.GRAY_STAINED_GLASS_PANE, " ", null);
+        // ✅ Deko-Rand
+        ItemStack glass = item(
+                Material.GRAY_STAINED_GLASS_PANE,
+                plugin.getLang().get("messages.gui.offline_player_select.border.name"),
+                null
+        );
+
         for (int i = 0; i < inv.getSize(); i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) inv.setItem(i, glass);
         }
@@ -42,7 +52,6 @@ public final class OfflinePlayerSelectGui {
             if (name == null || name.isBlank()) continue;
             list.add(op);
         }
-
         list.sort(Comparator.comparing(op -> op.getName().toLowerCase()));
 
         int maxPages = Math.max(1, (int) Math.ceil(list.size() / (double) PAGE_SIZE));
@@ -62,17 +71,22 @@ public final class OfflinePlayerSelectGui {
         int idxSlot = 0;
         for (int i = start; i < end; i++) {
             OfflinePlayer target = list.get(i);
-            ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-            SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-            if (meta != null) {
-                // Wichtig: OfflinePlayer geht auch (zeigt Skin, falls gecached)
+            ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+            ItemMeta baseMeta = head.getItemMeta();
+
+            if (baseMeta instanceof SkullMeta meta) {
                 meta.setOwningPlayer(target);
-                meta.setDisplayName(MessageUtil.color("&e" + target.getName()));
-                meta.setLore(List.of(
-                        MessageUtil.color("&7Klicken um diesen Spieler zu reporten"),
-                        MessageUtil.color("&8(UUID wird gespeichert)")
-                ));
+
+                String headName = plugin.getLang().get(
+                        "messages.gui.offline_player_select.player_head.name",
+                        Map.of("player", target.getName())
+                );
+                meta.setDisplayName(MessageUtil.color(headName));
+
+                List<String> lore = plugin.getLang().getStringList("messages.gui.offline_player_select.player_head.lore");
+                meta.setLore(lore.stream().map(MessageUtil::color).toList());
+
                 head.setItemMeta(meta);
             }
 
@@ -81,17 +95,39 @@ public final class OfflinePlayerSelectGui {
             if (idxSlot >= slots.length) break;
         }
 
-        // Navigation
-        inv.setItem(49, item(Material.BARRIER, "&cZurück", List.of("&7Zurück zur Online-Auswahl")));
+        // ✅ Navigation / Buttons (fixe Slots)
+        inv.setItem(49, item(
+                Material.BARRIER,
+                plugin.getLang().get("messages.gui.offline_player_select.button.back.name"),
+                plugin.getLang().getStringList("messages.gui.offline_player_select.button.back.lore")
+        ));
 
         if (page > 1) {
-            inv.setItem(48, item(Material.ARROW, "&eZurück", List.of("&7Seite " + (page - 1))));
+            inv.setItem(48, item(
+                    Material.ARROW,
+                    plugin.getLang().get("messages.gui.offline_player_select.button.prev.name"),
+                    List.of(plugin.getLang().get(
+                            "messages.gui.offline_player_select.button.prev.lore_line",
+                            Map.of("page", String.valueOf(page - 1))
+                    ))
+            ));
         }
         if (page < maxPages) {
-            inv.setItem(50, item(Material.ARROW, "&eWeiter", List.of("&7Seite " + (page + 1))));
+            inv.setItem(50, item(
+                    Material.ARROW,
+                    plugin.getLang().get("messages.gui.offline_player_select.button.next.name"),
+                    List.of(plugin.getLang().get(
+                            "messages.gui.offline_player_select.button.next.lore_line",
+                            Map.of("page", String.valueOf(page + 1))
+                    ))
+            ));
         }
 
-        inv.setItem(53, item(Material.SUNFLOWER, "&aRefresh", List.of("&7Liste neu laden")));
+        inv.setItem(53, item(
+                Material.SUNFLOWER,
+                plugin.getLang().get("messages.gui.offline_player_select.button.refresh.name"),
+                plugin.getLang().getStringList("messages.gui.offline_player_select.button.refresh.lore")
+        ));
 
         return inv;
     }

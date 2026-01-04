@@ -72,6 +72,16 @@ messages:
   staff_close_usage: "{prefix}&cUsage: /scm close <id> [reason...]"
   staff_ticket_already_closed: "{prefix}&cThis ticket is already closed."
   staff_ticket_closed: "{prefix}&aTicket &f#{id} &ahas been closed by &f{staff}&a. &7Reason: &f{reason}"
+  staff_ticket_not_exists: "{prefix}&cTicket no longer exists."
+  staff_ticket_close_prompt: "{prefix}&ePlease enter the close reason in chat.\n&7Type &fcancel &7to abort."
+  staff_ticket_teleported: "{prefix}&aTeleported to &f{player}&a (Ticket #{id})"
+  staff_ticket_close_cancel_words:
+    - "cancel"
+    - "abort"
+  staff_ticket_close_cancelled: "{prefix}&7Cancelled."
+  staff_ticket_closed_done: "{prefix}&aTicket #{id} has been closed."
+
+
 
   staff_action:
     warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"
@@ -129,6 +139,135 @@ messages:
         name: "&e{player}"
         lore:
           - "&7Click to report this player"
+    offline_player_select:
+      title: "&8SCM &7Offline players &8- &7Page &e{page}"
+
+      border:
+        name: " "
+
+      player_head:
+        name: "&e{player}"
+        lore:
+          - "&7Click to report this player"
+          - "&8(UUID will be stored)"
+
+      button:
+        back:
+          name: "&cBack"
+          lore:
+            - "&7Back to online selection"
+
+        prev:
+          name: "&ePrevious"
+          lore_line: "&7Page {page}"
+
+        next:
+          name: "&eNext"
+          lore_line: "&7Page {page}"
+
+        refresh:
+          name: "&aRefresh"
+          lore:
+            - "&7Reload list"
+    staff_ticket:
+      title: "&8SCM &cTickets &7Page &e{page}"
+      border:
+        name: " "
+
+      unknown_target: "Unknown"
+
+      ticket:
+        name: "&cTicket &7#{id}"
+        lore:
+          id: "&7ID: &f#{id}"
+          status: "&7Status: &f{status}"
+          category: "&7Category: &f{category}"
+          from: "&7From: &f{player}"
+          against: "&7Against: &f{player}"
+          claimed: "&7Claimed: &f{staff}"
+          created: "&7Created: &f{date}"
+          click_hint: "&8Click: Open details"
+
+      controls:
+        prev:
+          name: "&ePrevious"
+          lore:
+            - "&7Previous page"
+        refresh:
+          name: "&bRefresh"
+          lore:
+            - "&7Reload"
+        next:
+          name: "&eNext"
+          lore:
+            - "&7Next page"
+        counter:
+          name: "&fTickets: &b{count}"
+          lore_line: "&7Page &f{page}&7/&f{maxPage}"
+    staff_ticket_detail:
+      title: "&8SCM &cTicket &7#{id}"
+
+      border:
+        name: " "
+
+      unknown_target: "Unknown"
+
+      ticket_item:
+        name: "&fTicket #{id}"
+
+      info:
+        creator: "&7Creator: &f{player}"
+        target: "&7Target: &f{player}"
+        category: "&7Category: &f{category}"
+        extra: "&7Info: &f{info}"
+        status: "&7Status: &f{status}"
+        claimed_by: "&7Claimed by: &f{staff}"
+        created: "&7Created: &f{date}"
+
+      button:
+        claim:
+          name: "&aClaim"
+          lore:
+            - "&7Claim this ticket"
+        unclaim:
+          name: "&aUnclaim"
+          lore:
+            - "&7Release this ticket"
+        teleport:
+          name: "&bTeleport"
+          lore:
+            - "&7Teleport to the creator"
+        close:
+          name: "&cClose"
+          lore:
+            - "&7Close ticket (reason in chat)"
+        back:
+          name: "&cBack"
+          lore:
+            - "&7Back to overview"
+    staff_ticket_close:
+      title: "&8Ticket &7#{id} &8- &cClose"
+
+      border:
+        name: " "
+
+      button:
+        back:
+          name: "&7« Back"
+          lore:
+            - "&7Back to ticket view"
+
+      reasons:
+        - "Done"
+        - "False report"
+        - "No evidence"
+        - "Rules explained"
+        - "Spam"
+
+      reason_item:
+        name: "&c{reason}"
+        lore_click: "&7Click = close"
+        lore_reason: "&8Reason: &f{reason}"
 
   join_log:
     format: |

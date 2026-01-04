@@ -14,6 +14,7 @@ import de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener;
 import de.shadowcrest.mod.tickets.listeners.StaffTicketCloseChatListener;
 import de.shadowcrest.mod.tickets.gui.OfflinePlayerSelectGuiListener;
 import de.shadowcrest.mod.language.LanguageManager;
+import de.shadowcrest.mod.tickets.gui.StaffTicketCloseGuiListener;
 
 
 
@@ -73,6 +74,8 @@ public class ShadowCrestMod extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new StaffTicketCloseChatListener(this), this);
         getServer().getPluginManager().registerEvents(new OfflinePlayerSelectGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new StaffTicketCloseGuiListener(this), this);
+
 
 
 

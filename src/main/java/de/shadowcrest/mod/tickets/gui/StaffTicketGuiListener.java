@@ -2,7 +2,9 @@ package de.shadowcrest.mod.tickets.gui;
 
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.tickets.Ticket;
+import de.shadowcrest.mod.tickets.TicketStatus;
 import de.shadowcrest.mod.util.MessageUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,12 +13,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StaffTicketGuiListener implements Listener {
 
     private final ShadowCrestMod plugin;
 
-    // UUID -> TicketID (wenn Staff gerade Reason im Chat eingeben soll)
+    // (kann bleiben, falls du Chat-Close weiterhin nutzt)
     public static final Map<UUID, Integer> CLOSE_REASON = new ConcurrentHashMap<>();
 
     public StaffTicketGuiListener(ShadowCrestMod plugin) {
@@ -24,30 +28,34 @@ public class StaffTicketGuiListener implements Listener {
     }
 
     private boolean isListGui(String title) {
-        String base = MessageUtil.color(plugin.getConfig().getString("messages.staff_ticket_gui_title", "&8SCM &cTickets"));
-        return title != null && title.startsWith(base);
+        if (title == null) return false;
+
+        String pattern = plugin.getLang().get("messages.gui.staff_ticket.title"); // ... {page}
+        int idx = pattern.indexOf("{page}");
+        String prefix = idx >= 0 ? pattern.substring(0, idx) : pattern;
+        return title.startsWith(prefix);
     }
 
     private boolean isDetailGui(String title) {
-        String base = MessageUtil.color(plugin.getConfig().getString("messages.staff_ticket_detail_title", "&8SCM &cTicket"));
-        return title != null && title.startsWith(base);
+        if (title == null) return false;
+
+        String pattern = plugin.getLang().get("messages.gui.staff_ticket_detail.title"); // ... #{id}
+        int idx = pattern.indexOf("{id}");
+        String prefix = idx >= 0 ? pattern.substring(0, idx) : pattern;
+        return title.startsWith(prefix);
     }
 
-    private int parsePage(String title) {
-        // "... Seite X"
-        try {
-            String clean = title.replace("§", "");
-            int idx = clean.lastIndexOf("Seite ");
-            if (idx == -1) return 1;
-            String num = clean.substring(idx + "Seite ".length()).trim();
-            return Integer.parseInt(num);
-        } catch (Exception ignored) {
-            return 1;
+    private int parseTrailingNumber(String title) {
+        if (title == null) return -1;
+        String clean = title.replace("§", "");
+        Matcher m = Pattern.compile("(\\d+)\\s*$").matcher(clean);
+        if (m.find()) {
+            try { return Integer.parseInt(m.group(1)); } catch (Exception ignored) {}
         }
+        return -1;
     }
 
-    private int parseTicketIdFromTitle(String title) {
-        // "... #ID"
+    private int parseTicketIdFromTitleHash(String title) {
         try {
             String clean = title.replace("§", "");
             int idx = clean.lastIndexOf("#");
@@ -58,8 +66,7 @@ public class StaffTicketGuiListener implements Listener {
         }
     }
 
-    private int parseTicketIdFromItemName(String displayName) {
-        // "Ticket #123"
+    private int parseTicketIdFromItemNameHash(String displayName) {
         try {
             String clean = displayName.replace("§", "");
             int idx = clean.lastIndexOf("#");
@@ -73,42 +80,53 @@ public class StaffTicketGuiListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
-        String title = e.getView().getTitle();
 
-        // Staff GUI Permission (anpassen wie du willst)
         if (!p.hasPermission("shadowcrest.mod.ticket.staff")) return;
 
-        if (!isListGui(title) && !isDetailGui(title)) return;
+        String title = e.getView().getTitle();
+        boolean list = isListGui(title);
+        boolean detail = isDetailGui(title);
+        if (!list && !detail) return;
 
         e.setCancelled(true);
-        if (e.getCurrentItem() == null || e.getCurrentItem().getItemMeta() == null) return;
+
+        if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
+        if (e.getCurrentItem().getItemMeta() == null) return;
 
         String itemName = e.getCurrentItem().getItemMeta().getDisplayName();
-        if (itemName == null) return;
+        if (itemName == null) itemName = "";
 
+        int rawSlot = e.getRawSlot();
+        Material type = e.getCurrentItem().getType();
+
+        // =====================
         // LIST GUI
-        if (isListGui(title)) {
-            int page = parsePage(title);
+        // =====================
+        if (list) {
+            int page = parseTrailingNumber(title);
+            if (page <= 0) page = 1;
 
-            if (itemName.contains("Zurück")) {
+            // Controls: Slot 45=prev, 49=refresh, 53=next
+            if (rawSlot == 45 && type == Material.ARROW) {
                 p.openInventory(StaffTicketGui.build(plugin, p, Math.max(1, page - 1)));
                 return;
             }
-            if (itemName.contains("Weiter")) {
-                p.openInventory(StaffTicketGui.build(plugin, p, page + 1));
-                return;
-            }
-            if (itemName.contains("Refresh")) {
+            if (rawSlot == 49 && type == Material.BOOK) {
                 p.openInventory(StaffTicketGui.build(plugin, p, page));
                 return;
             }
+            if (rawSlot == 53 && type == Material.ARROW) {
+                p.openInventory(StaffTicketGui.build(plugin, p, page + 1));
+                return;
+            }
 
-            int id = parseTicketIdFromItemName(itemName);
+            // Ticket klicken
+            int id = parseTicketIdFromItemNameHash(itemName);
             if (id <= 0) return;
 
             Ticket t = plugin.getTicketManager().getTicket(id);
             if (t == null) {
-                p.sendMessage(MessageUtil.color("&cTicket existiert nicht mehr."));
+                p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_exists"));
                 p.openInventory(StaffTicketGui.build(plugin, p, page));
                 return;
             }
@@ -117,82 +135,73 @@ public class StaffTicketGuiListener implements Listener {
             return;
         }
 
+        // =====================
         // DETAIL GUI
-        if (isDetailGui(title)) {
-            int id = parseTicketIdFromTitle(title);
-            Ticket t = plugin.getTicketManager().getTicket(id);
-            if (t == null) {
-                p.sendMessage(MessageUtil.color("&cTicket existiert nicht mehr."));
-                p.openInventory(StaffTicketGui.build(plugin, p, 1));
+        // =====================
+        int id = parseTicketIdFromTitleHash(title);
+        Ticket t = plugin.getTicketManager().getTicket(id);
+
+        if (t == null) {
+            p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_exists"));
+            p.openInventory(StaffTicketGui.build(plugin, p, 1));
+            return;
+        }
+
+        // Slot 22 = Back
+        if (rawSlot == 22 && type == Material.BARRIER) {
+            p.openInventory(StaffTicketGui.build(plugin, p, 1));
+            return;
+        }
+
+        // Slot 15 = Teleport
+        if (rawSlot == 15 && type == Material.ENDER_PEARL) {
+            var creator = org.bukkit.Bukkit.getPlayer(t.getCreatorUuid());
+            if (creator == null) {
+                p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_creator_offline"));
                 return;
             }
+            p.teleport(creator.getLocation());
+            p.sendMessage(MessageUtil.format(
+                    plugin,
+                    "messages.staff_ticket_teleported",
+                    MessageUtil.ph("player", creator.getName(), "id", t.getId())
+            ));
+            return;
+        }
 
-            if (itemName.contains("Zurück")) {
-                p.openInventory(StaffTicketGui.build(plugin, p, 1));
-                return;
-            }
-        //TELEPORT BUTTON
-            if (itemName.contains("Teleport")) {
-                var creator = org.bukkit.Bukkit.getPlayer(t.getCreatorUuid());
-                if (creator == null) {
-                    p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_creator_offline"));
-                    return;
-                }
-                p.teleport(creator.getLocation());
-                p.sendMessage(MessageUtil.color(plugin.getConfig().getString("prefix","") +
-                        "&aTeleportiert zu &f" + creator.getName() + "&a (Ticket #" + t.getId() + ")"));
-                return;
-            }
-
-            if (itemName.contains("Claim")) {
-                if (!t.isClosed()) {
-
-                    // schon geclaimed? dann nix oder Hinweis (optional)
-                    // if (t.isClaimed()) { p.sendMessage(MessageUtil.color("&cDieses Ticket ist bereits geclaimed.")); return; }
-
+        // Slot 11 = Claim/Unclaim
+        if (rawSlot == 11 && type == Material.LIME_WOOL) {
+            if (!t.isClosed()) {
+                if (t.isClaimed()) {
+                    // Unclaim
+                    t.setClaimedByUuid(null);
+                    t.setClaimedByName(null);
+                    t.setClaimedAt(0L);
+                    t.setStatus(TicketStatus.OPEN);
+                } else {
+                    // Claim
                     t.claim(p.getUniqueId(), p.getName());
-                    plugin.getTicketManager().save();
 
-                    // ✅ gleiche Notify-Message wie /scm accept
                     String claimed = MessageUtil.format(
                             plugin,
                             "messages.staff_ticket_claimed",
                             MessageUtil.ph("id", t.getId(), "staff", p.getName())
                     );
-
                     MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
-
-                    // optional: falls du sicher willst, dass der Klicker es IMMER sieht
                     p.sendMessage(claimed);
                 }
 
-                p.openInventory(StaffTicketDetailGui.build(plugin, t));
-                return;
+                plugin.getTicketManager().save();
             }
 
+            p.openInventory(StaffTicketDetailGui.build(plugin, t));
+            return;
+        }
 
-            if (itemName.contains("Unclaim")) {
-                if (!t.isClosed()) {
-                    t.setClaimedByUuid(null);
-                    t.setClaimedByName(null);
-                    t.setClaimedAt(0L);
-                    // Status wieder OPEN, wenn nicht CLOSED
-                    t.setStatus(de.shadowcrest.mod.tickets.TicketStatus.OPEN);
-                    plugin.getTicketManager().save();
-                }
-                p.openInventory(StaffTicketDetailGui.build(plugin, t));
-                return;
-            }
-
-            if (itemName.contains("Close")) {
-                CLOSE_REASON.put(p.getUniqueId(), t.getId());
-                p.closeInventory();
-                p.sendMessage(MessageUtil.color(
-                        plugin.getConfig().getString("prefix","") +
-                                "&eBitte gib im Chat den Schließgrund ein.\n&7Tippe &fabbrechen &7zum Abbrechen."
-                ));
-
-            }
+        // Slot 16 = Close (öffnet Close-GUI)
+        if (rawSlot == 16 && type == Material.RED_WOOL) {
+            p.openInventory(StaffTicketCloseGui.build(plugin, t.getId()));
+            return;
         }
     }
 }

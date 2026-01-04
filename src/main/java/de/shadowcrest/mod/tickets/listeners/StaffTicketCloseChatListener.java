@@ -11,6 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.List;
+import java.util.Map;
+
 public class StaffTicketCloseChatListener implements Listener {
 
     private final ShadowCrestMod plugin;
@@ -29,10 +32,22 @@ public class StaffTicketCloseChatListener implements Listener {
 
         String msg = e.getMessage().trim();
 
-        if (msg.equalsIgnoreCase("abbrechen") || msg.equalsIgnoreCase("cancel")) {
+        // Cancel-Wörter aus Language
+        List<String> cancelWords = plugin.getLang().getStringList("messages.staff_ticket_close_cancel_words");
+        boolean isCancel = false;
+        if (cancelWords != null) {
+            for (String w : cancelWords) {
+                if (w != null && !w.isBlank() && msg.equalsIgnoreCase(w.trim())) {
+                    isCancel = true;
+                    break;
+                }
+            }
+        }
+
+        if (isCancel) {
             StaffTicketGuiListener.CLOSE_REASON.remove(p.getUniqueId());
             Bukkit.getScheduler().runTask(plugin, () -> {
-                p.sendMessage(MessageUtil.color("&7Abgebrochen."));
+                p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_close_cancelled"));
                 p.openInventory(StaffTicketGui.build(plugin, p, 1));
             });
             return;
@@ -43,7 +58,7 @@ public class StaffTicketCloseChatListener implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> {
             Ticket t = plugin.getTicketManager().getTicket(ticketId);
             if (t == null) {
-                p.sendMessage(MessageUtil.color("&cTicket existiert nicht mehr."));
+                p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_exists"));
                 p.openInventory(StaffTicketGui.build(plugin, p, 1));
                 return;
             }
@@ -51,7 +66,11 @@ public class StaffTicketCloseChatListener implements Listener {
             t.close(p.getName(), msg);
             plugin.getTicketManager().save();
 
-            p.sendMessage(MessageUtil.color("&aTicket #" + t.getId() + " wurde geschlossen."));
+            p.sendMessage(MessageUtil.format(
+                    plugin,
+                    "messages.staff_ticket_closed_done",
+                    MessageUtil.ph("id", t.getId())
+            ));
             p.openInventory(StaffTicketGui.build(plugin, p, 1));
         });
     }
