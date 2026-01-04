@@ -32,6 +32,7 @@ public class ScmCommand implements CommandExecutor {
                 return true;
             }
             plugin.reloadConfig();
+            plugin.getLang().reload();
             sender.sendMessage(MessageUtil.msg(plugin, "messages.reload_done"));
             return true;
         }

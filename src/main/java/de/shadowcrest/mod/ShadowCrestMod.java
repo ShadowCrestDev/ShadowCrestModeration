@@ -13,6 +13,8 @@ import de.shadowcrest.mod.tickets.gui.PlayerSelectGuiListener;
 import de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener;
 import de.shadowcrest.mod.tickets.listeners.StaffTicketCloseChatListener;
 import de.shadowcrest.mod.tickets.gui.OfflinePlayerSelectGuiListener;
+import de.shadowcrest.mod.language.LanguageManager;
+
 
 
 
@@ -22,11 +24,17 @@ public class ShadowCrestMod extends JavaPlugin {
 
     private PlayerDataManager dataManager;
     private TicketManager ticketManager;
+    private LanguageManager lang;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        // Language system
+        this.lang = new LanguageManager(this);
+        this.lang.init();
         getLogger().info("SCM DEBUG: Loaded jar build " + getDescription().getVersion() + " / " + System.currentTimeMillis());
+
+
 
         // Tickets
         this.ticketManager = new TicketManager(this);
@@ -100,4 +108,8 @@ public class ShadowCrestMod extends JavaPlugin {
     public TicketManager getTicketManager() {
         return ticketManager;
     }
+    public LanguageManager getLang() {
+        return lang;
+    }
+
 }

@@ -1,0 +1,93 @@
+# ShadowCrestModeration - English (en_US)
+# Placeholders: {prefix} {player} {reason} {warns} {duration} {version} {author} {ip} {days} {hours} {minutes} {id} {category} {staff} {seconds} {max} {oldwarns} {warn_list} {date}
+
+messages:
+  no_permission: "{prefix}&cYou don’t have permission to do that."
+  player_not_found: "{prefix}&cPlayer not found or has never joined before."
+  invalid_ip: "{prefix}&cInvalid IP address."
+  reason_required: "{prefix}&cYou must provide a reason!"
+  duration_required: "{prefix}&cYou must provide a duration! Example: 24h, 30m, 7d"
+  invalid_duration: "{prefix}&cInvalid duration! Use e.g. 30m, 24h, 7d."
+
+  scm_usage: "{prefix}&7Usage: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets &7| &f/scm gui"
+  reload_done: "{prefix}&aConfig reloaded."
+  scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
+
+  warn_given: "{prefix}&e{player} &7has been warned. &7Reason: &f{reason} &8(&7Warns: &f{warns}&8)"
+  warned_screen: "&cYou have been warned!\n&7Reason: &f{reason}\n&7Warns: &f{warns}"
+
+  kick_screen: "&cYou have been kicked by ShadowCrest!\n&7Reason: &f{reason}"
+  ban_screen: "&cYou have been permanently banned by ShadowCrest!\n&7Reason: &f{reason}"
+  tempban_screen: "&cYou have been banned by ShadowCrest!\n&7Duration: &f{duration}\n&7Reason: &f{reason}"
+  ipban_screen: "&cYour IP has been banned by ShadowCrest!\n&7Reason: &f{reason}"
+
+  unban_usage: "{prefix}&cUsage: /unban <player>"
+  unban_done: "{prefix}&a{player} has been unbanned."
+  unban_not_banned: "{prefix}&e{player} &7is not banned."
+
+  unipban_usage: "{prefix}&cUsage: /unipban <ip>"
+  unipban_done: "{prefix}&aIP &f{ip} &ahas been unbanned."
+  unipban_not_banned: "{prefix}&eIP &f{ip} &7is not banned."
+
+  clearwarns_usage: "{prefix}&cUsage: /clearwarns <player>"
+  clearwarns_done: "{prefix}&aAll warnings of &f{player} &ahave been cleared."
+
+  warns_usage: "{prefix}&cUsage: /warns <player>"
+  warns_header: "{prefix}&7Warnings for &f{player}&7: &f{warns}"
+  warns_empty: "{prefix}&7No warnings found."
+  warns_entry: " &8- &f{date} &7| &f{reason}"
+
+  console_only: "{prefix}&cThis command can only be used from the console."
+  ip_usage: "{prefix}&cUsage: /ip <player>"
+  ip_result: "{prefix}&7IP of &f{player}&7: &c{ip}"
+
+  playtime_usage: "{prefix}&cUsage: /playtime <player>"
+  playtime_result: "{prefix}&7Playtime of &f{player}&7: &a{playtime}"
+  playtime_disabled: "{prefix}&cPlaytime is disabled."
+
+  ticket_disabled: "{prefix}&cTickets are disabled."
+  ticket_cooldown: "{prefix}&cPlease wait &f{seconds}s&c before creating another ticket."
+  ticket_max_open: "{prefix}&cYou already have &f{max}&c open tickets. Please wait until staff handles them."
+  ticket_gui_title: "&8SCM &7Tickets"
+  ticket_select_category: "{prefix}&7Select a category in the GUI."
+  ticket_enter_player: "{prefix}&ePlease type the player name in chat (or &cCancel&e)."
+  ticket_player_cancel: "{prefix}&cTicket creation cancelled."
+  ticket_player_unknown: "{prefix}&cPlayer &f{player}&c has never joined before. Ticket will be created anyway."
+  ticket_enter_info: "{prefix}&7Optional: Type additional info in chat or type &f- &7for none."
+  ticket_created: "{prefix}&aTicket created! &7ID: &f#{id} &7Category: {category} &7Player: {player}"
+  ticket_notify: "&c&lNEW TICKET! &7(# {id}) {player} &7→ {category} &8| &7Use: &f/scm gui"
+  ticket_closed_user: "{prefix}&7Your ticket &f#{id} &7has been closed by &f{staff}&7. Reason: &f{reason}"
+  ticket_player_gui_title: "&8SCM &7Select player"
+  ticket_playerselect_title: "&8SCM &7Select player"
+
+  staff_ticket_hint: "{prefix}&7Use: &f/scm accept &7to claim the next ticket."
+  staff_ticket_claimed: "{prefix}&aTicket &f#{id} &ahas been claimed by &f{staff}&a!"
+  staff_no_tickets: "{prefix}&7No open tickets available."
+  staff_tp_usage: "{prefix}&cUsage: /scm tpticket <id>"
+  staff_ticket_not_found: "{prefix}&cTicket not found."
+  staff_ticket_creator_offline: "{prefix}&cTicket creator is currently offline."
+  staff_close_usage: "{prefix}&cUsage: /scm close <id> [reason...]"
+  staff_ticket_already_closed: "{prefix}&cThis ticket is already closed."
+  staff_ticket_closed: "{prefix}&aTicket &f#{id} &ahas been closed by &f{staff}&a. &7Reason: &f{reason}"
+
+  staff_action:
+    warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"
+    kick: "{prefix}&7[&cKICK&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    ban: "{prefix}&7[&4BAN&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    tempban: "{prefix}&7[&4TEMPBAN&7] &f{staff} &7-> &f{player} &7| &f{duration} &7| &f{reason}"
+    ipban: "{prefix}&7[&4IPBAN&7] &f{staff} &7-> &f{player} &7| &f{reason}"
+    unban: "{prefix}&7[&aUNBAN&7] &f{staff} &7-> &f{player}"
+    unipban: "{prefix}&7[&aUNIPBAN&7] &f{staff} &7-> &f{ip}"
+    clearwarns: "{prefix}&7[&bCLEARWARNS&7] &f{staff} &7-> &f{player} &8(&f{oldwarns}&8)"
+
+  join_log:
+    format: |
+      &8&m--------------------------------
+      &5Join Log: &f{player}
+      &7Warnings: &f{warns}
+      &7Playtime: &f{playtime}
+      &7Latest warnings:
+      {warn_list}
+      &8&m--------------------------------
+  warn_list_format: " &8- &f{date} &7| &f{reason}"
+  warn_list_empty: " &8- &7None"

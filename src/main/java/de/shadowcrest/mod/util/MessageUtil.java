@@ -26,13 +26,34 @@ public final class MessageUtil {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
     }
 
+    /**
+     * ✅ raw() liest JETZT aus der Language-Datei statt aus config.yml
+     * Achtung: prefix bleibt in config.yml (so wie du es willst)
+     */
     public static String raw(ShadowCrestMod plugin, String path) {
-        return plugin.getConfig().getString(path, "");
+        // prefix weiter aus config
+        if ("prefix".equalsIgnoreCase(path)) {
+            return plugin.getConfig().getString("prefix", "");
+        }
+
+        // Alles andere aus Language
+        String v = plugin.getLang().getRaw(path); // <- diese Methode muss es im LanguageManager geben
+        return v == null ? "" : v;
     }
 
+    /**
+     * ✅ msg() nutzt Language + ersetzt {prefix}
+     */
     public static String msg(ShadowCrestMod plugin, String path) {
         String prefix = raw(plugin, "prefix");
-        return color(raw(plugin, path).replace("{prefix}", prefix));
+        String base = raw(plugin, path);
+
+        // Wenn Key fehlt -> sichtbar machen statt "nichts"
+        if (base == null || base.isEmpty()) {
+            base = "{prefix}&cMissing lang key: &f" + path;
+        }
+
+        return color(base.replace("{prefix}", prefix));
     }
 
     public static Map<String, String> ph(Object... keyValue) {
@@ -45,6 +66,11 @@ public final class MessageUtil {
 
     public static String format(ShadowCrestMod plugin, String path, Map<String, String> placeholders) {
         String s = raw(plugin, path);
+
+        if (s == null || s.isEmpty()) {
+            s = "{prefix}&cMissing lang key: &f" + path;
+        }
+
         s = s.replace("{prefix}", raw(plugin, "prefix"));
         for (var e : placeholders.entrySet()) {
             s = s.replace("{" + e.getKey() + "}", e.getValue());
@@ -55,10 +81,16 @@ public final class MessageUtil {
     // Wie format(...) aber als Component (für kick)
     public static Component formatComponent(ShadowCrestMod plugin, String path, Map<String, String> placeholders) {
         String raw = raw(plugin, path);
+
+        if (raw == null || raw.isEmpty()) {
+            raw = "{prefix}&cMissing lang key: &f" + path;
+        }
+
         raw = raw.replace("{prefix}", raw(plugin, "prefix"));
         for (var e : placeholders.entrySet()) {
             raw = raw.replace("{" + e.getKey() + "}", e.getValue());
         }
+        raw = color(raw);
         return LegacyComponentSerializer.legacyAmpersand().deserialize(raw);
     }
 
