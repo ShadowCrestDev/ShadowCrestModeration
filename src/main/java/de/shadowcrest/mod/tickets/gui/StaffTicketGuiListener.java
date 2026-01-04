@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.Bukkit;
+
 
 import java.util.Map;
 import java.util.UUID;
@@ -178,6 +180,10 @@ public class StaffTicketGuiListener implements Listener {
                     t.setClaimedByName(null);
                     t.setClaimedAt(0L);
                     t.setStatus(TicketStatus.OPEN);
+
+                    // optional: toggle-mode beim staff aus
+                    plugin.getTicketChatManager().disableChat(p.getUniqueId());
+
                 } else {
                     // Claim
                     t.claim(p.getUniqueId(), p.getName());
@@ -189,11 +195,26 @@ public class StaffTicketGuiListener implements Listener {
                     );
                     MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", claimed);
                     p.sendMessage(claimed);
+
+                    // ✅ NEU: Ticket-Chat-Session starten
+                    plugin.getTicketChatManager().startSession(
+                            t.getId(),
+                            t.getCreatorUuid(),
+                            p.getUniqueId()
+                    );
+
+                    // ✅ NEU: Info an Supporter + Ersteller senden
+                    plugin.getTicketChatManager().sendClaimInfo(
+                            t.getId(),
+                            p,
+                            Bukkit.getPlayer(t.getCreatorUuid())
+                    );
                 }
 
                 plugin.getTicketManager().save();
             }
 
+            // GUI neu öffnen/refresh (optional)
             p.openInventory(StaffTicketDetailGui.build(plugin, t));
             return;
         }
@@ -205,3 +226,4 @@ public class StaffTicketGuiListener implements Listener {
         }
     }
 }
+

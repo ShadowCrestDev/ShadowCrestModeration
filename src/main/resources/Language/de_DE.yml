@@ -63,6 +63,18 @@ messages:
   ticket_cannot_report_self: "{prefix}&cDu kannst dich nicht selbst reporten."
   ticket_target_unknown: "Unbekannt"
 
+  ticket_chat_claimed_supporter: "{prefix} &aTicket &e#{id} &awurde geclaimt. Schreibe mit &e/t <msg>&a."
+  ticket_chat_claimed_requester: "{prefix} &aDein Ticket &e#{id} &awurde von &e{supporter} &aangenommen. Antworte mit &e/t <msg>&a."
+
+  ticket_chat_mode_enabled: "{prefix} &aTicket-Chat aktiviert für &e#{id}&a."
+  ticket_chat_mode_disabled: "{prefix} &aTicket-Chat deaktiviert."
+  ticket_chat_mode_enable_failed: "{prefix} &cDu kannst den Ticket-Chat für dieses Ticket nicht aktivieren."
+
+  ticket_chat_no_last_ticket: "{prefix} &cDu hast kein aktives Ticket."
+  ticket_chat_session_closed: "{prefix} &aTicket &e#{id} &awurde geschlossen. Chat-Modus beendet."
+
+  ticket_chat_format: "&8[&bTicket #{id}&8] &7{sender}&8: &f{message}"
+
 
   staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &abeansprucht!"

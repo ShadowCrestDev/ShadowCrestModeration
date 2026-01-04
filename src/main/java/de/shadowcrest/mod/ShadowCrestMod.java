@@ -3,39 +3,35 @@ package de.shadowcrest.mod;
 import de.shadowcrest.mod.commands.*;
 import de.shadowcrest.mod.data.PlayerDataManager;
 import de.shadowcrest.mod.listeners.JoinListener;
+import de.shadowcrest.mod.language.LanguageManager;
 import de.shadowcrest.mod.tickets.TicketManager;
-import de.shadowcrest.mod.tickets.gui.TicketGuiListener;
-import de.shadowcrest.mod.tickets.listeners.TicketChatListener;
-import de.shadowcrest.mod.tickets.listeners.TicketQuitListener;
+import de.shadowcrest.mod.tickets.chat.TicketChatManager;
+import de.shadowcrest.mod.tickets.chat.TicketPrivateChatListener;
+import de.shadowcrest.mod.tickets.gui.*;
+import de.shadowcrest.mod.tickets.listeners.*;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
-import de.shadowcrest.mod.tickets.gui.PlayerSelectGuiListener;
-import de.shadowcrest.mod.tickets.gui.StaffTicketGuiListener;
-import de.shadowcrest.mod.tickets.listeners.StaffTicketCloseChatListener;
-import de.shadowcrest.mod.tickets.gui.OfflinePlayerSelectGuiListener;
-import de.shadowcrest.mod.language.LanguageManager;
-import de.shadowcrest.mod.tickets.gui.StaffTicketCloseGuiListener;
-
-
-
-
-
 
 public class ShadowCrestMod extends JavaPlugin {
 
     private PlayerDataManager dataManager;
     private TicketManager ticketManager;
     private LanguageManager lang;
+    private TicketChatManager ticketChatManager;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
         // Language system
         this.lang = new LanguageManager(this);
         this.lang.init();
-        getLogger().info("SCM DEBUG: Loaded jar build " + getDescription().getVersion() + " / " + System.currentTimeMillis());
 
+        // Ticket Chat Manager (Support-Chat)
+        this.ticketChatManager = new TicketChatManager(this);
 
+        getLogger().info("SCM DEBUG: Loaded jar build " +
+                getDescription().getVersion() + " / " + System.currentTimeMillis());
 
         // Tickets
         this.ticketManager = new TicketManager(this);
@@ -45,6 +41,7 @@ public class ShadowCrestMod extends JavaPlugin {
 
         this.dataManager = new PlayerDataManager(this);
 
+        // Commands
         register("warn", new WarnCommand(this));
         register("warns", new WarnsCommand(this));
         register("clearwarns", new ClearWarnsCommand(this));
@@ -59,26 +56,31 @@ public class ShadowCrestMod extends JavaPlugin {
         register("ip", new IpCommand(this));
 
         register("playtime", new PlaytimeCommand(this));
-
         register("scm", new ScmCommand(this));
         register("ticket", new TicketCommand(this));
+        register("t", new TicketReplyCommand(this));
+        register("tc", new TicketChatToggleCommand(this));
 
+
+
+
+        // General listeners
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
-        // Ticket listeners
+        // Ticket GUI + Wizard listeners
         getServer().getPluginManager().registerEvents(new TicketGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSelectGuiListener(this), this);
-        getServer().getPluginManager().registerEvents(new TicketChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new TicketChatListener(this), this); // WIZARD
         getServer().getPluginManager().registerEvents(new TicketQuitListener(this), this);
+
         // Staff Ticket GUI
         getServer().getPluginManager().registerEvents(new StaffTicketGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new StaffTicketCloseChatListener(this), this);
         getServer().getPluginManager().registerEvents(new OfflinePlayerSelectGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new StaffTicketCloseGuiListener(this), this);
 
-
-
-
+        // ✅ NEU: Support-Privatchat (Toggle-Chat)
+        getServer().getPluginManager().registerEvents(new TicketPrivateChatListener(this), this);
 
         getLogger().info("ShadowCrestModeration enabled.");
     }
@@ -111,8 +113,12 @@ public class ShadowCrestMod extends JavaPlugin {
     public TicketManager getTicketManager() {
         return ticketManager;
     }
+
     public LanguageManager getLang() {
         return lang;
     }
 
+    public TicketChatManager getTicketChatManager() {
+        return ticketChatManager;
+    }
 }

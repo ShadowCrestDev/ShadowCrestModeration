@@ -62,6 +62,18 @@ messages:
   ticket_player_not_found_in_gui: "{prefix}&cPlayer not found (maybe offline)."
   ticket_cannot_report_self: "{prefix}&cYou cannot report yourself."
 
+  ticket_chat_claimed_supporter: "{prefix} &aTicket &e#{id} &ahas been claimed. Send with &e/t <msg>&a."
+  ticket_chat_claimed_requester: "{prefix} &aYour ticket &e#{id} &ahas been accepted by &e{supporter}&a. Reply using &e/t <msg>&a."
+
+  ticket_chat_mode_enabled: "{prefix} &aTicket chat enabled for &e#{id}&a."
+  ticket_chat_mode_disabled: "{prefix} &aTicket chat disabled."
+  ticket_chat_mode_enable_failed: "{prefix} &cYou cannot enable ticket chat for this ticket."
+
+  ticket_chat_no_last_ticket: "{prefix} &cYou have no active ticket."
+  ticket_chat_session_closed: "{prefix} &aTicket &e#{id} &ahas been closed. Chat mode ended."
+
+  ticket_chat_format: "&8[&bTicket #{id}&8] &7{sender}&8: &f{message}"
+
 
   staff_ticket_hint: "{prefix}&7Use: &f/scm accept &7to claim the next ticket."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &ahas been claimed by &f{staff}&a!"

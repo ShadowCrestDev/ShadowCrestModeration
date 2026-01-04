@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.Bukkit;
+
 
 import java.util.Map;
 
@@ -79,6 +81,17 @@ public class StaffTicketCloseGuiListener implements Listener {
             t.close(p.getName(), reason);
             plugin.getTicketManager().save();
 
+// ✅ Auto-Disable: Chat-Session schließen + Toggle-Modus aus
+            plugin.getTicketChatManager().closeSession(t.getId());
+
+// ✅ Optional: Hinweis an beide, dass Chat-Modus beendet ist
+            plugin.getTicketChatManager().sendSessionClosed(p, t.getId());
+
+            var creator = Bukkit.getPlayer(t.getCreatorUuid());
+            if (creator != null) {
+                plugin.getTicketChatManager().sendSessionClosed(creator, t.getId());
+            }
+
             p.sendMessage(MessageUtil.format(
                     plugin,
                     "messages.staff_ticket_closed_done",
@@ -86,6 +99,7 @@ public class StaffTicketCloseGuiListener implements Listener {
             ));
 
             p.openInventory(StaffTicketGui.build(plugin, p, 1));
+
         }
     }
 }

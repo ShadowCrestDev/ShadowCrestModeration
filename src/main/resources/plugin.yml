@@ -32,6 +32,13 @@ commands:
     usage: /playtime <spieler>
   ticket:
     usage: /ticket
+  t:
+    description: Sendet eine Nachricht ins aktuelle Ticket
+  tc:
+    description: Toggle Ticket-Chat Modus
+
+
+
 
 
 
