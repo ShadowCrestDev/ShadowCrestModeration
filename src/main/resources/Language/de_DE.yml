@@ -80,6 +80,26 @@ messages:
     unipban: "{prefix}&7[&aUNIPBAN&7] &f{staff} &7-> &f{ip}"
     clearwarns: "{prefix}&7[&bCLEARWARNS&7] &f{staff} &7-> &f{player} &8(&f{oldwarns}&8)"
 
+  gui:
+    ticket:
+      category:
+        hacking:
+          name: "&cHacking"
+          lore:
+            - "&7Cheats / KillAura / Fly"
+        duping:
+          name: "&eDuping"
+          lore:
+            - "&7Dupe / Exploit"
+        griefing:
+          name: "&4Griefing"
+          lore:
+            - "&7Grief / Diebstahl / Base"
+        other:
+          name: "&bSonstiges"
+          lore:
+            - "&7Andere Probleme"
+
   join_log:
     format: |
       &8&m--------------------------------

@@ -80,6 +80,28 @@ messages:
     unipban: "{prefix}&7[&aUNIPBAN&7] &f{staff} &7-> &f{ip}"
     clearwarns: "{prefix}&7[&bCLEARWARNS&7] &f{staff} &7-> &f{player} &8(&f{oldwarns}&8)"
 
+
+
+  gui:
+    ticket:
+      category:
+        hacking:
+          name: "&cHacking"
+          lore:
+            - "&7Cheats / KillAura / Fly"
+        duping:
+          name: "&eDuping"
+          lore:
+            - "&7Dupes / Exploits"
+        griefing:
+          name: "&4Griefing"
+          lore:
+            - "&7Grief / Theft / Base"
+        other:
+          name: "&bOther"
+          lore:
+            - "&7Other issues"
+
   join_log:
     format: |
       &8&m--------------------------------
@@ -91,3 +113,4 @@ messages:
       &8&m--------------------------------
   warn_list_format: " &8- &f{date} &7| &f{reason}"
   warn_list_empty: " &8- &7None"
+
