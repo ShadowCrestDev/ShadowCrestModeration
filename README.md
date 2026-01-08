@@ -1,110 +1,205 @@
-# ShadowCrestModeration (SCM)
+ShadowCrestModeration (SCM)
 
-**ShadowCrestModeration** ist ein modernes, leichtgewichtiges Moderations-Plugin für Spigot & Paper.  
-Es bietet ein flexibles Warnsystem mit Auto-Strafen, klassische Moderations-Commands, Join-Logs für Staff sowie optionale Playtime-Übersicht.
+ShadowCrestModeration ist ein modernes, leistungsstarkes Moderations-Plugin für Paper & Spigot,
+mit einem vollständig GUI-basierten Ticketsystem, privatem Ticket-Chat und internem Team-Chat.
 
-Entwickelt mit Fokus auf **Übersichtlichkeit, Performance und Konfigurierbarkeit**.
+Entwickelt mit Fokus auf Übersichtlichkeit, Stabilität und professionelle Moderations-Workflows.
 
-Kompatibilität
+🚀 Version
 
-Minecraft: 1.19 – 1.21.4+
+v1.2.1
 
-Server: Paper, Spigot
-(Bukkit-kompatibel über Spigot-API)
+Integriertes Release – enthält alle Änderungen seit v1.1.0
+(v1.1.1 war eine interne Entwicklungsversion)
 
----
+🔧 Kompatibilität
 
-## ✨ Features
+Minecraft: 1.20 – 1.21.x
 
-- 🔔 **Warn-System**
-  - /warn mit Pflicht-Grund
-  - Warn-Historie pro Spieler
-  - Automatische Strafen (Tempban / Ban) ab definierter Warn-Anzahl
+Server: Paper / Spigot
 
-- 🛠 **Moderations-Commands**
-  - Kick, Ban, Tempban
-  - IP-Ban & IP-Unban
-  - Unban, ClearWarns, Warns-Übersicht
+Java: 21
 
-- 📋 **Join-Logs für Moderation**
-  - Anzeige von Warn-Anzahl & letzter Warns beim Join
-  - Optional: Anzeige der Spielzeit
-  - Nur sichtbar für Staff (Permission-basiert)
+✨ Features
+🎫 Ticketsystem (GUI-first)
 
-- ⏱ **Playtime**
-  - Anzeige der Spielzeit (Tage / Stunden / Minuten)
-  - In Join-Logs integrierbar
-  - Auch per Command abrufbar
+Komplett GUI-basiertes Ticketsystem
 
-- ⚙ **Vollständig konfigurierbar**
-  - Alle Nachrichten über `config.yml`
-  - Prefix, Texte, Auto-Strafen, Anzeigeoptionen
+Schrittweise Ticket-Erstellung:
 
-- 🧩 **Sauber & kompatibel**
-  - Paper & Spigot
-  - Moderne Adventure-Components für Kicks
-  - Konsolen-Support für alle Commands
+Kategorie → Zielspieler → Zusatzinfo
 
----
+Cooldown & Limit für offene Tickets
 
-## 📦 Installation
+Staff-Ticket-Übersicht mit Seiten
 
-1. Lade die neueste `.jar` aus den Releases herunter
-2. Lege sie in den `plugins/` Ordner deines Servers
-3. Starte den Server
-4. Konfiguriere das Plugin in `config.yml`
-5. Optional: `/scm reload`
+Ticket-Detail-GUI mit:
 
----
+Claim / Unclaim
 
-## 📜 Commands
+Teleport zum Ersteller
 
-| Command | Beschreibung |
-|------|-------------|
-| `/warn <Spieler> <Grund>` | Verwarnung vergeben |
-| `/warns <Spieler>` | Verwarnungen anzeigen |
-| `/clearwarns <Spieler>` | Alle Warns löschen |
-| `/kick <Spieler> <Grund>` | Spieler kicken |
-| `/ban <Spieler> <Grund>` | Permanenter Bann |
-| `/tempban <Spieler> <Zeit> <Grund>` | Zeitlich begrenzter Bann |
-| `/unban <Spieler>` | Bann aufheben |
-| `/ipban <Spieler/IP> <Grund>` | IP bannen |
-| `/unipban <IP>` | IP-Bann aufheben |
-| `/playtime <Spieler>` | Spielzeit anzeigen |
-| `/scm reload` | Config neu laden |
-| `/scm info` | Plugin-Infos anzeigen |
+Schließen mit GUI-Auswahl (Gründe)
 
----
+Ticket-Status:
 
-## 🔐 Permissions
+OPEN, CLAIMED, CLOSED
 
-| Permission | Beschreibung |
-|-----------|--------------|
-| `shadowcrest.mod.warn` | /warn |
-| `shadowcrest.mod.warns` | /warns |
-| `shadowcrest.mod.clearwarns` | /clearwarns |
-| `shadowcrest.mod.kick` | /kick |
-| `shadowcrest.mod.ban` | /ban |
-| `shadowcrest.mod.tempban` | /tempban |
-| `shadowcrest.mod.ipban` | /ipban |
-| `shadowcrest.mod.unban` | /unban |
-| `shadowcrest.mod.unipban` | /unipban |
-| `shadowcrest.mod.playtime` | /playtime |
-| `shadowcrest.mod.notify` | Join-Logs & Staff-Logs |
-| `shadowcrest.mod.reload` | /scm reload |
-| `shadowcrest.mod.info` | /scm info |
+Automatische Staff-Benachrichtigungen
 
----
+💬 Privater Ticket-Chat
 
+Privater Chat zwischen Supporter & Ticket-Ersteller
 
+/t <message> zum Antworten
+
+Toggle-Modus für Ticket-Chat
+
+Automatisches Beenden beim Ticket-Close
+
+Sichere Session-Verwaltung
+
+⚡ Ticket Actions GUI
+
+Moderationsaktionen direkt aus dem Ticket
+
+Warn
+
+Kick
+
+Tempban (1h / 1d)
+
+Permanenter Ban
+
+Standard-Grund: Ticket
+
+Saubere Trennung:
+
+Ticket-Detail-GUI
+
+Ticket-Actions-GUI
+
+Vollständig über Language-Dateien konfigurierbar
+
+🧑‍🤝‍🧑 Interner Team-Chat
+
+Interner Chat nur für Staff
+
+/teamchat – Toggle-Modus
+
+/teamchat <msg> – Einmal-Nachricht
+
+Eigenes Chat-Format
+
+Unabhängig vom Ticket-Chat
+
+Permission-basiert
+
+🛠 Moderations-Commands
+
+/warn, /warns, /clearwarns
+
+/kick
+
+/ban, /tempban
+
+/unban
+
+/ipban, /unipban
+
+/ip
+
+/playtime
+
+📋 Join-Logs für Staff
+
+Anzeige beim Join (nur für Staff):
+
+Anzahl Warns
+
+Letzte Verwarnungen
+
+Spielzeit (optional)
+
+Vollständig konfigurierbar
+
+⚙ Konfiguration & Sprache
+
+Vollständig konfigurierbar über:
+
+config.yml
+
+Language/de_DE.yml
+
+Language/en_US.yml
+
+Einheitlicher Prefix
+
+Saubere Placeholder-Unterstützung
+
+Keine Hardcoded-Texte
+
+📦 Installation
+
+Lade die neueste ShadowCrestModeration.jar aus den Releases herunter
+
+Lege die Datei in den plugins/ Ordner
+
+Starte den Server
+
+Passe config.yml und die Language-Dateien an
+
+Optional: /scm reload
+
+📜 Commands
+Command	Beschreibung
+/ticket	Ticket-GUI öffnen
+/t <msg>	Nachricht im Ticket-Chat
+/teamchat [msg]	Interner Team-Chat
+/scm gui	Staff-Ticket-GUI
+/scm accept	Nächstes Ticket annehmen
+/scm reload	Config & Language neu laden
+/scm info	Plugin-Infos anzeigen
+/warn	Spieler verwarnen
+/kick	Spieler kicken
+/ban	Spieler bannen
+/tempban	Spieler temporär bannen
+/unban	Bann aufheben
+/ipban	IP bannen
+/unipban	IP-Bann aufheben
+/playtime	Spielzeit anzeigen
+🔐 Permissions (Auszug)
+Permission	Beschreibung
+shadowcrest.mod.ticket.staff	Zugriff auf Staff-Ticket-GUIs
+shadowcrest.mod.ticket.notify	Ticket-Benachrichtigungen
+shadowcrest.mod.teamchat	Interner Team-Chat
+shadowcrest.mod.warn	Warns vergeben
+shadowcrest.mod.kick	Kick
+shadowcrest.mod.ban	Ban
+shadowcrest.mod.tempban	Tempban
+shadowcrest.mod.reload	/scm reload
+shadowcrest.mod.info	/scm info
+
+(Alle Permissions standardmäßig op)
+
+🧠 Technische Highlights
+
+GUI-Erkennung über PersistentDataContainer
+
+Keine Titel-Hacks
+
+Saubere Listener-Trennung
+
+Moderne Java-Struktur
+
+Stabil & erweiterbar
 
 📄 Lizenz
 
 Dieses Projekt steht unter der Apache License 2.0.
-Siehe LICENSE
- für Details.
+Siehe LICENSE für weitere Informationen.
 
-👤 Autor
+❤️ Credits
 
-ShadowCrest
-GitHub: https://github.com/ShadowCrestDev
+Entwickelt von ShadowCrest
+Mit Fokus auf Qualität, Wartbarkeit & professionelle Moderation.
