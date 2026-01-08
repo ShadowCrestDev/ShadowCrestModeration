@@ -81,8 +81,8 @@ permissions:
     default: op
   shadowcrest.mod.ticket.staff:
     default: op
-    shadowcrest.mod.teamchat:
-      default: op
+  shadowcrest.mod.teamchat:
+    default: op
 
 
 
