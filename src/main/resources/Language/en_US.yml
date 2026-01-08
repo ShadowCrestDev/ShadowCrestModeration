@@ -9,7 +9,7 @@ messages:
   duration_required: "{prefix}&cYou must provide a duration! Example: 24h, 30m, 7d"
   invalid_duration: "{prefix}&cInvalid duration! Use e.g. 30m, 24h, 7d."
 
-  scm_usage: "{prefix}&7Usage: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets &7| &f/scm gui"
+  scm_usage: "{prefix} &7Use: &e/scm reload&7, &e/scm info&7, &e/scm gui"
   reload_done: "{prefix}&aConfig reloaded."
   scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
@@ -45,6 +45,9 @@ messages:
   playtime_result: "{prefix}&7Playtime of &f{player}&7: &a{playtime}"
   playtime_disabled: "{prefix}&cPlaytime is disabled."
 
+  only_players: "{prefix} &cOnly players can use this command."
+  ticket_gui_only: "{prefix} &cPlease use the ticket GUI. &7/ticket"
+
   ticket_disabled: "{prefix}&cTickets are disabled."
   ticket_cooldown: "{prefix}&cPlease wait &f{seconds}s&c before creating another ticket."
   ticket_max_open: "{prefix}&cYou already have &f{max}&c open tickets. Please wait until staff handles them."
@@ -61,6 +64,7 @@ messages:
   ticket_playerselect_title: "&8SCM &7Select player"
   ticket_player_not_found_in_gui: "{prefix}&cPlayer not found (maybe offline)."
   ticket_cannot_report_self: "{prefix}&cYou cannot report yourself."
+  ticket_target_unknown: "Unknown"
 
   ticket_chat_claimed_supporter: "{prefix} &aTicket &e#{id} &ahas been claimed. Send with &e/t <msg>&a."
   ticket_chat_claimed_requester: "{prefix} &aYour ticket &e#{id} &ahas been accepted by &e{supporter}&a. Reply using &e/t <msg>&a."
@@ -68,32 +72,37 @@ messages:
   ticket_chat_mode_enabled: "{prefix} &aTicket chat enabled for &e#{id}&a."
   ticket_chat_mode_disabled: "{prefix} &aTicket chat disabled."
   ticket_chat_mode_enable_failed: "{prefix} &cYou cannot enable ticket chat for this ticket."
-
   ticket_chat_no_last_ticket: "{prefix} &cYou have no active ticket."
   ticket_chat_session_closed: "{prefix} &aTicket &e#{id} &ahas been closed. Chat mode ended."
-
   ticket_chat_format: "&8[&bTicket #{id}&8] &7{sender}&8: &f{message}"
 
+  # ✅ NEW: Action-GUI feedback
+  ticket_action_no_target: "{prefix} &cNo reported player set in this ticket."
+  ticket_action_failed: "{prefix} &cAction could not be executed."
+  ticket_action_done: "{prefix} &aAction &e{action} &aexecuted for &e{player}&a."
 
-  staff_ticket_hint: "{prefix}&7Use: &f/scm accept &7to claim the next ticket."
+  # ✅ Update: old hint referenced /scm accept (removed)
+  staff_ticket_hint: "{prefix}&7Use: &f/scm gui &7to open the staff ticket overview."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &ahas been claimed by &f{staff}&a!"
   staff_no_tickets: "{prefix}&7No open tickets available."
-  staff_tp_usage: "{prefix}&cUsage: /scm tpticket <id>"
   staff_ticket_not_found: "{prefix}&cTicket not found."
   staff_ticket_creator_offline: "{prefix}&cTicket creator is currently offline."
-  staff_close_usage: "{prefix}&cUsage: /scm close <id> [reason...]"
   staff_ticket_already_closed: "{prefix}&cThis ticket is already closed."
   staff_ticket_closed: "{prefix}&aTicket &f#{id} &ahas been closed by &f{staff}&a. &7Reason: &f{reason}"
   staff_ticket_not_exists: "{prefix}&cTicket no longer exists."
-  staff_ticket_close_prompt: "{prefix}&ePlease enter the close reason in chat.\n&7Type &fcancel &7to abort."
   staff_ticket_teleported: "{prefix}&aTeleported to &f{player}&a (Ticket #{id})"
+
+  teamchat:
+    enabled: "{prefix} &aTeam chat enabled."
+    disabled: "{prefix} &aTeam chat disabled."
+    format: "&8[&5Team&8] &d{player}&8: &f{message}"
+
+
   staff_ticket_close_cancel_words:
     - "cancel"
     - "abort"
   staff_ticket_close_cancelled: "{prefix}&7Cancelled."
   staff_ticket_closed_done: "{prefix}&aTicket #{id} has been closed."
-  ticket_target_unknown: "Unknown"
-
 
   staff_action:
     warn: "{prefix}&7[&eWARN&7] &f{staff} &7-> &f{player} &7| &f{reason} &8(&f{warns}&8)"
@@ -104,8 +113,6 @@ messages:
     unban: "{prefix}&7[&aUNBAN&7] &f{staff} &7-> &f{player}"
     unipban: "{prefix}&7[&aUNIPBAN&7] &f{staff} &7-> &f{ip}"
     clearwarns: "{prefix}&7[&bCLEARWARNS&7] &f{staff} &7-> &f{player} &8(&f{oldwarns}&8)"
-
-
 
   gui:
     ticket:
@@ -126,12 +133,11 @@ messages:
           name: "&bOther"
           lore:
             - "&7Other issues"
+
     player_select:
       title: "&8SCM &7Select player"
-
       border:
         name: " "
-
       button:
         back:
           name: "&cBack"
@@ -146,48 +152,41 @@ messages:
           lore:
             - "&7You don't know who it was."
             - "&7Ticket will be created without a target"
-
       player_head:
         name: "&e{player}"
         lore:
           - "&7Click to report this player"
+
     offline_player_select:
       title: "&8SCM &7Offline players &8- &7Page &e{page}"
-
       border:
         name: " "
-
       player_head:
         name: "&e{player}"
         lore:
           - "&7Click to report this player"
           - "&8(UUID will be stored)"
-
       button:
         back:
           name: "&cBack"
           lore:
             - "&7Back to online selection"
-
         prev:
           name: "&ePrevious"
           lore_line: "&7Page {page}"
-
         next:
           name: "&eNext"
           lore_line: "&7Page {page}"
-
         refresh:
           name: "&aRefresh"
           lore:
             - "&7Reload list"
+
     staff_ticket:
       title: "&8SCM &cTickets &7Page &e{page}"
       border:
         name: " "
-
       unknown_target: "Unknown"
-
       ticket:
         name: "&cTicket &7#{id}"
         lore:
@@ -199,7 +198,6 @@ messages:
           claimed: "&7Claimed: &f{staff}"
           created: "&7Created: &f{date}"
           click_hint: "&8Click: Open details"
-
       controls:
         prev:
           name: "&ePrevious"
@@ -216,17 +214,14 @@ messages:
         counter:
           name: "&fTickets: &b{count}"
           lore_line: "&7Page &f{page}&7/&f{maxPage}"
+
     staff_ticket_detail:
       title: "&8SCM &cTicket &7#{id}"
-
       border:
         name: " "
-
       unknown_target: "Unknown"
-
       ticket_item:
         name: "&fTicket #{id}"
-
       info:
         creator: "&7Creator: &f{player}"
         target: "&7Target: &f{player}"
@@ -235,7 +230,6 @@ messages:
         status: "&7Status: &f{status}"
         claimed_by: "&7Claimed by: &f{staff}"
         created: "&7Created: &f{date}"
-
       button:
         claim:
           name: "&aClaim"
@@ -245,6 +239,11 @@ messages:
           name: "&aUnclaim"
           lore:
             - "&7Release this ticket"
+        actions:
+          name: "&cActions"
+          lore:
+            - "&7Punish/tools directly from the ticket."
+            - "&8Click to open"
         teleport:
           name: "&bTeleport"
           lore:
@@ -252,34 +251,62 @@ messages:
         close:
           name: "&cClose"
           lore:
-            - "&7Close ticket (reason in chat)"
+            - "&7Close ticket"
         back:
           name: "&cBack"
           lore:
             - "&7Back to overview"
+
     staff_ticket_close:
       title: "&8Ticket &7#{id} &8- &cClose"
-
       border:
         name: " "
-
       button:
         back:
           name: "&7« Back"
           lore:
             - "&7Back to ticket view"
-
       reasons:
         - "Done"
         - "False report"
         - "No evidence"
         - "Rules explained"
         - "Spam"
-
       reason_item:
         name: "&c{reason}"
         lore_click: "&7Click = close"
         lore_reason: "&8Reason: &f{reason}"
+
+    staff_ticket_actions:
+      title: "{prefix} &8Ticket &7#{id} &8| &cActions"
+      border:
+        name: " "
+      default_reason: "Ticket"
+      button:
+        back:
+          name: "&7Back"
+          lore:
+            - "&8Return to ticket view"
+        warn:
+          name: "&eWarn"
+          lore:
+            - "&7Warn the reported player"
+        kick:
+          name: "&cKick"
+          lore:
+            - "&7Kick the reported player"
+        tempban_1h:
+          name: "&6Tempban &7(1h)"
+          lore:
+            - "&7Tempban for 1 hour"
+        tempban_1d:
+          name: "&6Tempban &7(1d)"
+          lore:
+            - "&7Tempban for 1 day"
+        ban:
+          name: "&4Ban"
+          lore:
+            - "&7Permanent ban"
 
 join_log:
   format: |
@@ -293,5 +320,3 @@ join_log:
 
 warn_list_format: " &8- &f{date} &7| &f{reason}"
 warn_list_empty: " &8- &7None"
-
-

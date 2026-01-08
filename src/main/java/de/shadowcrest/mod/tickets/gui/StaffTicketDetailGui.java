@@ -105,6 +105,13 @@ public final class StaffTicketDetailGui {
                 plugin.getLang().getStringList("messages.gui.staff_ticket_detail.button.teleport.lore")
         ));
 
+        // Aktionen (Slot 14)
+        inv.setItem(14, item(
+                Material.ANVIL,
+                plugin.getLang().get("messages.gui.staff_ticket_detail.button.actions.name"),
+                plugin.getLang().getStringList("messages.gui.staff_ticket_detail.button.actions.lore")
+        ));
+
         // Close (Slot 16)
         inv.setItem(16, item(
                 Material.RED_WOOL,

@@ -43,18 +43,6 @@ warn_settings:
       # Anzeigeformat (Platzhalter: {days} {hours} {minutes})
       format: "{days}d {hours}h {minutes}m"
 
-  join_log:
-    format: |
-      &8&m--------------------------------
-      &5Join-Log: &f{player}
-      &7Warns: &f{warns}
-      &7Spielzeit: &f{playtime}
-      &7Letzte Warns:
-      {warn_list}
-      &8&m--------------------------------
-  warn_list_format: " &8- &f{date} &7| &f{reason}"
-  warn_list_empty: " &8- &7Keine"
-
 
 
 

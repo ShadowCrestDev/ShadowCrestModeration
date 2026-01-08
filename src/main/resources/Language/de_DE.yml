@@ -1,5 +1,5 @@
 # ShadowCrestModeration - German (de_DE)
-# Platzhalter: {prefix} {player} {reason} {warns} {duration} {version} {author} {ip} {days} {hours} {minutes} {id} {category} {staff} {seconds} {max} {oldwarns} {warn_list} {date}
+# Platzhalter: {prefix} {player} {reason} {warns} {duration} {version} {author} {ip} {days} {hours} {minutes} {id} {category} {staff} {seconds} {max} {oldwarns} {warn_list} {date} {action}
 
 messages:
   no_permission: "{prefix}&cDazu hast du keine Rechte."
@@ -9,7 +9,7 @@ messages:
   duration_required: "{prefix}&cDu musst eine Dauer angeben! Beispiel: 24h, 30m, 7d"
   invalid_duration: "{prefix}&cUngültige Dauer! Nutze z.B. 30m, 24h, 7d."
 
-  scm_usage: "{prefix}&7Nutze: &f/scm reload &7| &f/scm info &7| &f/scm accept &7| &f/scm tpticket <id> &7| &f/scm tickets &7| &f/scm gui"
+  scm_usage: "{prefix} &7Nutze: &e/scm reload&7, &e/scm info&7, &e/scm gui"
   reload_done: "{prefix}&aConfig wurde neu geladen."
   scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
@@ -38,12 +38,15 @@ messages:
   warns_entry: " &8- &f{date} &7| &f{reason}"
 
   console_only: "{prefix}&cDieser Befehl kann nur in der Konsole benutzt werden."
-  ip_usage: "{prefix}&cUsage: ip <spieler>"
+  ip_usage: "{prefix}&cNutze: /ip <spieler>"
   ip_result: "{prefix}&7IP von &f{player}&7: &c{ip}"
 
   playtime_usage: "{prefix}&cNutze: /playtime <spieler>"
   playtime_result: "{prefix}&7Spielzeit von &f{player}&7: &a{playtime}"
   playtime_disabled: "{prefix}&cPlaytime ist deaktiviert."
+
+  only_players: "{prefix} &cNur Spieler können diesen Command benutzen."
+  ticket_gui_only: "{prefix} &cBitte nutze das Ticket-GUI. &7/ticket"
 
   ticket_disabled: "{prefix}&cTickets sind deaktiviert."
   ticket_cooldown: "{prefix}&cBitte warte noch &f{seconds}s&c, bevor du ein neues Ticket erstellst."
@@ -75,24 +78,30 @@ messages:
 
   ticket_chat_format: "&8[&bTicket #{id}&8] &7{sender}&8: &f{message}"
 
+  # ✅ NEW: Action-GUI feedback
+  ticket_action_no_target: "{prefix} &cKein gemeldeter Spieler im Ticket gesetzt."
+  ticket_action_failed: "{prefix} &cAktion konnte nicht ausgeführt werden."
+  ticket_action_done: "{prefix} &aAktion &e{action} &aausgeführt für &e{player}&a."
 
-  staff_ticket_hint: "{prefix}&7Nutze: &f/scm accept &7um das nächste Ticket zu übernehmen."
+  # ✅ Update: old hint referenced /scm accept (removed)
+  staff_ticket_hint: "{prefix}&7Nutze: &f/scm gui &7um die Ticket-Übersicht zu öffnen."
   staff_ticket_claimed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &abeansprucht!"
   staff_no_tickets: "{prefix}&7Keine offenen Tickets vorhanden."
-  staff_tp_usage: "{prefix}&cNutze: /scm tpticket <id>"
   staff_ticket_not_found: "{prefix}&cTicket nicht gefunden."
   staff_ticket_creator_offline: "{prefix}&cTicket-Ersteller ist aktuell offline."
-  staff_close_usage: "{prefix}&cNutze: /scm close <id> [grund...]"
   staff_ticket_already_closed: "{prefix}&cDieses Ticket ist bereits geschlossen."
   staff_ticket_closed: "{prefix}&aTicket &f#{id} &awurde von &f{staff} &ageschlossen. &7Grund: &f{reason}"
   staff_ticket_not_exists: "{prefix}&cTicket existiert nicht mehr."
-  staff_ticket_close_prompt: "{prefix}&eBitte gib im Chat den Schließgrund ein.\n&7Tippe &fabbrechen &7zum Abbrechen."
   staff_ticket_teleported: "{prefix}&aTeleportiert zu &f{player}&a (Ticket #{id})"
   staff_ticket_close_cancel_words:
     - "abbrechen"
   staff_ticket_close_cancelled: "{prefix}&7Abgebrochen."
   staff_ticket_closed_done: "{prefix}&aTicket #{id} wurde geschlossen."
 
+  teamchat:
+    enabled: "{prefix} &aTeam-Chat aktiviert."
+    disabled: "{prefix} &aTeam-Chat deaktiviert."
+    format: "&8[&5Team&8] &d{player}&8: &f{message}"
 
 
   staff_action:
@@ -124,12 +133,11 @@ messages:
           name: "&bSonstiges"
           lore:
             - "&7Andere Probleme"
+
     player_select:
       title: "&8SCM &7Spieler auswählen"
-
       border:
         name: " "
-
       button:
         back:
           name: "&cZurück"
@@ -144,49 +152,41 @@ messages:
           lore:
             - "&7Du weißt nicht, wer es war."
             - "&7Ticket wird ohne Ziel erstellt"
-
       player_head:
         name: "&e{player}"
         lore:
           - "&7Klicken um diesen Spieler zu reporten"
+
     offline_player_select:
       title: "&8SCM &7Offline Spieler &8- &7Seite &e{page}"
-
       border:
         name: " "
-
       player_head:
         name: "&e{player}"
         lore:
           - "&7Klicken um diesen Spieler zu reporten"
           - "&8(UUID wird gespeichert)"
-
       button:
         back:
           name: "&cZurück"
           lore:
             - "&7Zurück zur Online-Auswahl"
-
         prev:
           name: "&eZurück"
-          # Einzeilige Lore, weil wir die Seite dynamisch einsetzen
           lore_line: "&7Seite {page}"
-
         next:
           name: "&eWeiter"
           lore_line: "&7Seite {page}"
-
         refresh:
           name: "&aRefresh"
           lore:
             - "&7Liste neu laden"
+
     staff_ticket:
       title: "&8SCM &cTickets &7Seite &e{page}"
       border:
         name: " "
-
       unknown_target: "Unbekannt"
-
       ticket:
         name: "&cTicket &7#{id}"
         lore:
@@ -198,7 +198,6 @@ messages:
           claimed: "&7Claimed: &f{staff}"
           created: "&7Erstellt: &f{date}"
           click_hint: "&8Klick: Details öffnen"
-
       controls:
         prev:
           name: "&eZurück"
@@ -215,17 +214,14 @@ messages:
         counter:
           name: "&fTickets: &b{count}"
           lore_line: "&7Seite &f{page}&7/&f{maxPage}"
+
     staff_ticket_detail:
       title: "&8SCM &cTicket &7#{id}"
-
       border:
         name: " "
-
       unknown_target: "Unbekannt"
-
       ticket_item:
         name: "&fTicket #{id}"
-
       info:
         creator: "&7Ersteller: &f{player}"
         target: "&7Ziel: &f{player}"
@@ -234,7 +230,6 @@ messages:
         status: "&7Status: &f{status}"
         claimed_by: "&7Claimed von: &f{staff}"
         created: "&7Erstellt: &f{date}"
-
       button:
         claim:
           name: "&aClaim"
@@ -244,43 +239,74 @@ messages:
           name: "&aUnclaim"
           lore:
             - "&7Ticket wieder freigeben"
+        actions:
+          name: "&cAktionen"
+          lore:
+            - "&7Strafen/Tools direkt aus dem Ticket."
+            - "&8Klicke zum Öffnen"
         teleport:
           name: "&bTeleport"
           lore:
             - "&7Zum Ersteller teleportieren"
         close:
-          name: "&cClose"
+          name: "&cSchließen"
           lore:
-            - "&7Ticket schließen (Grund im Chat)"
+            - "&7Ticket schließen"
         back:
           name: "&cZurück"
           lore:
             - "&7Zurück zur Übersicht"
+
     staff_ticket_close:
       title: "&8Ticket &7#{id} &8- &cSchließen"
-
       border:
         name: " "
-
       button:
         back:
           name: "&7« Zurück"
           lore:
             - "&7Zurück zur Ticket-Ansicht"
-
-      # Liste der Gründe (max 5 werden angezeigt)
       reasons:
         - "Erledigt"
         - "Falschmeldung"
         - "Keine Beweise"
         - "Regeln erklärt"
         - "Spam"
-
       reason_item:
         name: "&c{reason}"
         lore_click: "&7Klicken = schließen"
         lore_reason: "&8Grund: &f{reason}"
 
+    staff_ticket_actions:
+      title: "{prefix} &8Ticket &7#{id} &8| &cAktionen"
+      border:
+        name: " "
+      default_reason: "Ticket"
+      button:
+        back:
+          name: "&7Zurück"
+          lore:
+            - "&8Zur Ticket-Ansicht"
+        warn:
+          name: "&eWarn"
+          lore:
+            - "&7Verwarnung für den gemeldeten Spieler"
+        kick:
+          name: "&cKick"
+          lore:
+            - "&7Kicke den gemeldeten Spieler"
+        tempban_1h:
+          name: "&6Tempban &7(1h)"
+          lore:
+            - "&7Tempban für 1 Stunde"
+        tempban_1d:
+          name: "&6Tempban &7(1d)"
+          lore:
+            - "&7Tempban für 1 Tag"
+        ban:
+          name: "&4Ban"
+          lore:
+            - "&7Permanenter Bann"
 
 join_log:
   format: |
@@ -294,4 +320,3 @@ join_log:
 
 warn_list_format: " &8- &f{date} &7| &f{reason}"
 warn_list_empty: " &8- &7Keine"
-

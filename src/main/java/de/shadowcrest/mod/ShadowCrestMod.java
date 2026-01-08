@@ -18,6 +18,8 @@ public class ShadowCrestMod extends JavaPlugin {
     private TicketManager ticketManager;
     private LanguageManager lang;
     private TicketChatManager ticketChatManager;
+    private de.shadowcrest.mod.chat.TeamChatManager teamChatManager;
+
 
     @Override
     public void onEnable() {
@@ -37,9 +39,21 @@ public class ShadowCrestMod extends JavaPlugin {
         this.ticketManager = new TicketManager(this);
         this.ticketManager.load();
 
+        // Init PDC keys for Action GUI
+        StaffTicketActionsGui.initKeys(this);
+
+
         printBanner();
 
         this.dataManager = new PlayerDataManager(this);
+
+        // Team Chat
+        this.teamChatManager = new de.shadowcrest.mod.chat.TeamChatManager(this);
+        getServer().getPluginManager().registerEvents(
+                new de.shadowcrest.mod.chat.TeamChatListener(this, teamChatManager), this
+        );
+        register("teamchat", new de.shadowcrest.mod.commands.TeamChatCommand(this, teamChatManager));
+
 
         // Commands
         register("warn", new WarnCommand(this));
@@ -78,6 +92,7 @@ public class ShadowCrestMod extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StaffTicketCloseChatListener(this), this);
         getServer().getPluginManager().registerEvents(new OfflinePlayerSelectGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new StaffTicketCloseGuiListener(this), this);
+        getServer().getPluginManager().registerEvents(new StaffTicketActionsGuiListener(this), this);
 
         // ✅ NEU: Support-Privatchat (Toggle-Chat)
         getServer().getPluginManager().registerEvents(new TicketPrivateChatListener(this), this);

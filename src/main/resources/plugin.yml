@@ -1,5 +1,5 @@
 name: ShadowCrestModeration
-version: 1.1.1
+version: 1.2.1
 main: de.shadowcrest.mod.ShadowCrestMod
 api-version: 1.21
 
@@ -17,7 +17,7 @@ commands:
   ipban:
     usage: /ipban <spieler|ip> <grund...>
   scm:
-    usage: /scm reload|info|accept|tpticket|tickets|close|gui
+    usage: /scm reload|info|gui
   unban:
     usage: /unban <spieler>
   unipban:
@@ -36,6 +36,10 @@ commands:
     description: Sendet eine Nachricht ins aktuelle Ticket
   tc:
     description: Toggle Ticket-Chat Modus
+  teamchat:
+    usage: /teamchat [message...]
+    description: Internal staff team chat (toggle or send)
+    aliases: [team, tcg]
 
 
 
@@ -75,16 +79,11 @@ permissions:
     default: op
   shadowcrest.mod.ticket.notify:
     default: op
-  shadowcrest.mod.ticket.accept:
-    default: op
-  shadowcrest.mod.ticket.tp:
-    default: op
-  shadowcrest.mod.ticket.list:
-    default: op
-  shadowcrest.mod.ticket.close:
-    default: op
   shadowcrest.mod.ticket.staff:
     default: op
+    shadowcrest.mod.teamchat:
+      default: op
+
 
 
 

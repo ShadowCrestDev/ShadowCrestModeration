@@ -1,10 +1,11 @@
 package de.shadowcrest.mod.commands;
 
 import de.shadowcrest.mod.ShadowCrestMod;
-import de.shadowcrest.mod.tickets.gui.StaffTicketGui;
 import de.shadowcrest.mod.tickets.gui.TicketGui;
 import de.shadowcrest.mod.util.MessageUtil;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TicketCommand implements CommandExecutor {
@@ -19,17 +20,13 @@ public class TicketCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player p)) {
-            sender.sendMessage("Only players can use this command.");
+            sender.sendMessage(MessageUtil.msg(plugin, "messages.only_players"));
             return true;
         }
 
-        // /ticket staff
-        if (args.length >= 1 && args[0].equalsIgnoreCase("staff")) {
-            if (!p.hasPermission("shadowcrest.mod.ticket.staff")) {
-                p.sendMessage(MessageUtil.color("&cKeine Rechte."));
-                return true;
-            }
-            p.openInventory(StaffTicketGui.build(plugin, 1));
+        // Subcommands blocken (GUI-only)
+        if (args.length > 0) {
+            p.sendMessage(MessageUtil.msg(plugin, "messages.ticket_gui_only"));
             return true;
         }
 

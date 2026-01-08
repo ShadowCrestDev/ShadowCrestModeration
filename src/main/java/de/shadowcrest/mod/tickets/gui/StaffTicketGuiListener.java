@@ -219,6 +219,12 @@ public class StaffTicketGuiListener implements Listener {
             return;
         }
 
+        // Slot 14 = Actions
+        if (rawSlot == 14 && type == Material.ANVIL) {
+            p.openInventory(StaffTicketActionsGui.build(plugin, t));
+            return;
+        }
+
         // Slot 16 = Close (öffnet Close-GUI)
         if (rawSlot == 16 && type == Material.RED_WOOL) {
             p.openInventory(StaffTicketCloseGui.build(plugin, t.getId()));
