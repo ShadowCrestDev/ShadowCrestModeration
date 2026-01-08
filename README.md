@@ -1,18 +1,17 @@
-ShadowCrestModeration (SCM)
+# ShadowCrestModeration (SCM)
 
 ShadowCrestModeration ist ein modernes, leistungsstarkes Moderations-Plugin für Paper & Spigot,
 mit einem vollständig GUI-basierten Ticketsystem, privatem Ticket-Chat und internem Team-Chat.
 
 Entwickelt mit Fokus auf Übersichtlichkeit, Stabilität und professionelle Moderations-Workflows.
 
-🚀 Version
+## 🚀 Version
 
 v1.2.1
-
 Integriertes Release – enthält alle Änderungen seit v1.1.0
 (v1.1.1 war eine interne Entwicklungsversion)
 
-🔧 Kompatibilität
+## 🔧 Kompatibilität
 
 Minecraft: 1.20 – 1.21.x
 
@@ -20,14 +19,15 @@ Server: Paper / Spigot
 
 Java: 21
 
-✨ Features
-🎫 Ticketsystem (GUI-first)
+## ✨ Features
+
+---
+### 🎫 Ticketsystem (GUI-first)
 
 Komplett GUI-basiertes Ticketsystem
 
-Schrittweise Ticket-Erstellung:
-
-Kategorie → Zielspieler → Zusatzinfo
+Schrittweise Ticket-Erstellung
+→ Kategorie → Zielspieler → Zusatzinfo
 
 Cooldown & Limit für offene Tickets
 
@@ -39,15 +39,14 @@ Claim / Unclaim
 
 Teleport zum Ersteller
 
-Schließen mit GUI-Auswahl (Gründe)
+Schließen über GUI (vordefinierte Gründe)
 
-Ticket-Status:
-
-OPEN, CLAIMED, CLOSED
+Ticket-Status: OPEN, CLAIMED, CLOSED
 
 Automatische Staff-Benachrichtigungen
 
-💬 Privater Ticket-Chat
+---
+### 💬 Privater Ticket-Chat
 
 Privater Chat zwischen Supporter & Ticket-Ersteller
 
@@ -59,9 +58,10 @@ Automatisches Beenden beim Ticket-Close
 
 Sichere Session-Verwaltung
 
-⚡ Ticket Actions GUI
+---
+### ⚡ Ticket Actions GUI
 
-Moderationsaktionen direkt aus dem Ticket
+Moderationsaktionen direkt aus dem Ticket:
 
 Warn
 
@@ -79,15 +79,16 @@ Ticket-Detail-GUI
 
 Ticket-Actions-GUI
 
-Vollständig über Language-Dateien konfigurierbar
+Vollständig sprachabhängig (de_DE / en_US)
 
-🧑‍🤝‍🧑 Interner Team-Chat
+---
+### 🧑‍🤝‍🧑 Interner Team-Chat
 
 Interner Chat nur für Staff
 
-/teamchat – Toggle-Modus
+/teamchat → Toggle-Modus
 
-/teamchat <msg> – Einmal-Nachricht
+/teamchat <msg> → Einmal-Nachricht
 
 Eigenes Chat-Format
 
@@ -95,7 +96,82 @@ Unabhängig vom Ticket-Chat
 
 Permission-basiert
 
+---
 🛠 Moderations-Commands
+
+Warn-System mit Auto-Strafen
+
+Kick / Ban / Tempban
+
+IP-Ban & IP-Unban
+
+Unban
+
+Playtime-Anzeige
+
+---
+### 📋 Join-Logs für Staff
+
+Anzeige beim Join (nur für Staff):
+
+Warn-Anzahl
+
+Letzte Verwarnungen
+
+Spielzeit (optional)
+
+Vollständig konfigurierbar
+
+---
+### ⚙ Konfiguration & Sprache
+
+Vollständig konfigurierbar über:
+
+config.yml
+
+Language/de_DE.yml
+
+Language/en_US.yml
+
+Einheitlicher Prefix
+
+Platzhalter-Support
+
+Keine Hardcoded-Texte
+
+---
+### 📦 Installation
+
+Neueste ShadowCrestModeration.jar aus den Releases herunterladen
+
+In den Ordner plugins/ legen
+
+Server starten
+
+config.yml & Language-Dateien anpassen
+
+Optional: /scm reload
+
+---
+### 📜 Commands
+
+Spieler
+
+/ticket – Ticket-GUI öffnen
+
+/t <msg> – Nachricht im Ticket-Chat
+
+/teamchat <msg> – Interner Team-Chat
+
+Staff
+
+/scm gui – Staff-Ticket-GUI
+
+/scm reload – Config & Sprache neu laden
+
+/scm info – Plugin-Infos
+
+Moderation
 
 /warn, /warns, /clearwarns
 
@@ -111,82 +187,35 @@ Permission-basiert
 
 /playtime
 
-📋 Join-Logs für Staff
+---
+### 🔐 Permissions (Auszug)
 
-Anzeige beim Join (nur für Staff):
+shadowcrest.mod.ticket.staff – Zugriff auf Staff-Ticket-GUIs
 
-Anzahl Warns
+shadowcrest.mod.ticket.notify – Ticket-Benachrichtigungen
 
-Letzte Verwarnungen
+shadowcrest.mod.teamchat – Interner Team-Chat
 
-Spielzeit (optional)
+shadowcrest.mod.warn - Warne einen Spieler
 
-Vollständig konfigurierbar
+shadowcrest.mod.kick - Kicke einen Spieler
 
-⚙ Konfiguration & Sprache
+shadowcrest.mod.ban - Banne einen Spieler
 
-Vollständig konfigurierbar über:
+shadowcrest.mod.tempban - Spieler für eine gewisse Zeit Bannen
 
-config.yml
+shadowcrest.mod.reload - Reload Config
 
-Language/de_DE.yml
-
-Language/en_US.yml
-
-Einheitlicher Prefix
-
-Saubere Placeholder-Unterstützung
-
-Keine Hardcoded-Texte
-
-📦 Installation
-
-Lade die neueste ShadowCrestModeration.jar aus den Releases herunter
-
-Lege die Datei in den plugins/ Ordner
-
-Starte den Server
-
-Passe config.yml und die Language-Dateien an
-
-Optional: /scm reload
-
-📜 Commands
-Command	Beschreibung
-/ticket	Ticket-GUI öffnen
-/t <msg>	Nachricht im Ticket-Chat
-/teamchat [msg]	Interner Team-Chat
-/scm gui	Staff-Ticket-GUI
-/scm accept	Nächstes Ticket annehmen
-/scm reload	Config & Language neu laden
-/scm info	Plugin-Infos anzeigen
-/warn	Spieler verwarnen
-/kick	Spieler kicken
-/ban	Spieler bannen
-/tempban	Spieler temporär bannen
-/unban	Bann aufheben
-/ipban	IP bannen
-/unipban	IP-Bann aufheben
-/playtime	Spielzeit anzeigen
-🔐 Permissions (Auszug)
-Permission	Beschreibung
-shadowcrest.mod.ticket.staff	Zugriff auf Staff-Ticket-GUIs
-shadowcrest.mod.ticket.notify	Ticket-Benachrichtigungen
-shadowcrest.mod.teamchat	Interner Team-Chat
-shadowcrest.mod.warn	Warns vergeben
-shadowcrest.mod.kick	Kick
-shadowcrest.mod.ban	Ban
-shadowcrest.mod.tempban	Tempban
-shadowcrest.mod.reload	/scm reload
-shadowcrest.mod.info	/scm info
+shadowcrest.mod.info - Plugin infos
 
 (Alle Permissions standardmäßig op)
 
-🧠 Technische Highlights
+---
+### 🧠 Technische Highlights
 
 GUI-Erkennung über PersistentDataContainer
 
-Keine Titel-Hacks
+Keine Titel-Erkennung
 
 Saubere Listener-Trennung
 
@@ -194,12 +223,14 @@ Moderne Java-Struktur
 
 Stabil & erweiterbar
 
-📄 Lizenz
+---
+### 📄 Lizenz
 
-Dieses Projekt steht unter der Apache License 2.0.
-Siehe LICENSE für weitere Informationen.
+Apache License 2.0
+Siehe LICENSE für Details.
 
-❤️ Credits
+---
+### ❤️ Credits
 
 Entwickelt von ShadowCrest
-Mit Fokus auf Qualität, Wartbarkeit & professionelle Moderation.
+Fokus auf Qualität, Wartbarkeit & professionelle Moderation.
