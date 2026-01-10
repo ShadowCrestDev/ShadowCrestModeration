@@ -19,6 +19,9 @@ public class ShadowCrestMod extends JavaPlugin {
     private LanguageManager lang;
     private TicketChatManager ticketChatManager;
     private de.shadowcrest.mod.chat.TeamChatManager teamChatManager;
+    private de.shadowcrest.mod.mute.MuteManager muteManager;
+    private de.shadowcrest.mod.vanish.VanishManager vanishManager;
+
 
 
     @Override
@@ -53,6 +56,83 @@ public class ShadowCrestMod extends JavaPlugin {
                 new de.shadowcrest.mod.chat.TeamChatListener(this, teamChatManager), this
         );
         register("teamchat", new de.shadowcrest.mod.commands.TeamChatCommand(this, teamChatManager));
+
+        // Mute system
+        this.muteManager = new de.shadowcrest.mod.mute.MuteManager(this);
+        this.muteManager.load();
+
+        register("mute", new de.shadowcrest.mod.commands.MuteCommand(this));
+        register("unmute", new de.shadowcrest.mod.commands.UnmuteCommand(this));
+
+        getServer().getPluginManager().registerEvents(new de.shadowcrest.mod.mute.MuteChatListener(this), this);
+// 🔁 Auto-unmute task (every 10 seconds)
+        getServer().getScheduler().runTaskTimer(
+                this,
+                () -> muteManager.tickExpiredMutes(),
+                20L * 10, // delay
+                20L * 10  // period
+        );
+// 🔔 Mute ActionBar (every second)
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            for (var p : getServer().getOnlinePlayers()) {
+
+                var mm = getMuteManager();
+                if (mm == null) return;
+
+                // nur wenn gemutet
+                if (!mm.isMuted(p.getUniqueId())) continue;
+
+                var mp = mm.getMute(p.getUniqueId());
+                if (mp == null) continue;
+
+                String time = mp.isPermanent()
+                        ? getLang().get("messages.mute_time_permanent")
+                        : mm.getRemainingText(mp);
+
+                String raw = getLang().get("messages.mute_actionbar", java.util.Map.of(
+                        "time", time,
+                        "reason", mp.getReason() == null ? "-" : mp.getReason()
+                ));
+
+                // ✅ Colors korrekt für Adventure (LanguageManager liefert §-Codes)
+                p.sendActionBar(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+                        .legacySection()
+                        .deserialize(raw));
+            }
+        }, 20L, 20L);
+
+        getServer().getPluginManager().registerEvents(
+                new de.shadowcrest.mod.mute.MuteCommandBlockListener(this),
+                this
+        );
+
+        // Vanish system
+        this.vanishManager = new de.shadowcrest.mod.vanish.VanishManager(this);
+        this.vanishManager.load();
+
+        register("vanish", new de.shadowcrest.mod.commands.VanishCommand(this));
+        getServer().getPluginManager().registerEvents(new de.shadowcrest.mod.vanish.VanishListener(this), this);
+        getServer().getPluginManager().registerEvents(new de.shadowcrest.mod.vanish.VanishPickupListener(this), this);
+
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            for (var p : getServer().getOnlinePlayers()) {
+                if (getVanishManager().isVanished(p.getUniqueId())) {
+                    p.sendActionBar(net.kyori.adventure.text.Component.text(
+                            getLang().get("messages.vanish_actionbar")
+                    ));
+                }
+            }
+        }, 20L, 20L); // every second
+
+
+// apply vanish to online players (if plugin reload)
+        getServer().getScheduler().runTask(this, () -> {
+            for (var p : getServer().getOnlinePlayers()) {
+                if (vanishManager.isVanished(p.getUniqueId())) {
+                    vanishManager.applyVanishState(p, true);
+                }
+            }
+        });
 
 
         // Commands
@@ -136,4 +216,13 @@ public class ShadowCrestMod extends JavaPlugin {
     public TicketChatManager getTicketChatManager() {
         return ticketChatManager;
     }
+
+    public de.shadowcrest.mod.mute.MuteManager getMuteManager() {
+        return muteManager;
+    }
+    public de.shadowcrest.mod.vanish.VanishManager getVanishManager() {
+        return vanishManager;
+    }
+
+
 }

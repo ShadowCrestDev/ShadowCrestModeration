@@ -1,5 +1,5 @@
 name: ShadowCrestModeration
-version: 1.2.1
+version: 1.2.2
 main: de.shadowcrest.mod.ShadowCrestMod
 api-version: 1.21
 
@@ -8,6 +8,10 @@ author: ShadowCrest
 commands:
   warn:
     usage: /warn <spieler> <grund...>
+  mute:
+    usage: /mute <player> [duration] [reason...]
+  unmute:
+    usage: /unmute <player>
   kick:
     usage: /kick <spieler> <grund...>
   ban:
@@ -40,6 +44,10 @@ commands:
     usage: /teamchat [message...]
     description: Internal staff team chat (toggle or send)
     aliases: [team, tcg]
+  vanish:
+    usage: /vanish [player]
+    description: Toggle vanish mode
+    aliases: [v]
 
 
 
@@ -83,6 +91,17 @@ permissions:
     default: op
   shadowcrest.mod.teamchat:
     default: op
+  shadowcrest.mod.mute:
+    default: op
+  shadowcrest.mod.unmute:
+    default: op
+  shadowcrest.mod.mute.bypass:
+    default: op
+  shadowcrest.mod.vanish:
+    default: op
+  shadowcrest.mod.vanish.see:
+    default: op
+
 
 
 

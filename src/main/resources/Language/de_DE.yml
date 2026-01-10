@@ -16,6 +16,20 @@ messages:
   warn_given: "{prefix}&e{player} &7wurde gewarnt. &7Grund: &f{reason} &8(&7Warns: &f{warns}&8)"
   warned_screen: "&cDu wurdest verwarnt!\n&7Grund: &f{reason}\n&7Warns: &f{warns}"
 
+  mute_usage: "{prefix}&cNutze: /mute <spieler> [dauer] [grund...]"
+  unmute_usage: "{prefix}&cNutze: /unmute <spieler>"
+
+  mute_default_reason: "Chat-Verstoß"
+  mute_time_permanent: "Permanent"
+
+  mute_done: "{prefix}&a{player} &7wurde gemutet. &7Dauer: &f{duration} &8| &7Grund: &f{reason}"
+  muted: "{prefix}&cDu bist gemutet. &7Grund: &f{reason} &8| &7Rest: &f{time}"
+  unmute_done: "{prefix}&a{player} &7wurde entmutet."
+  unmute_not_muted: "{prefix}&e{player} &7ist nicht gemutet."
+  unmuted_you: "{prefix}&aDu kannst wieder schreiben."
+  mute_actionbar: "&c🔇 Du bist gemutet &7| &f{time} &7| &7Grund: &f{reason}"
+
+
   kick_screen: "&cDu wurdest gekickt von ShadowCrest!\n&7Grund: &f{reason}"
   ban_screen: "&cDu wurdest permanent gebannt von ShadowCrest!\n&7Grund: &f{reason}"
   tempban_screen: "&cDu wurdest gebannt von ShadowCrest!\n&7Dauer: &f{duration}\n&7Grund: &f{reason}"
@@ -97,6 +111,13 @@ messages:
     - "abbrechen"
   staff_ticket_close_cancelled: "{prefix}&7Abgebrochen."
   staff_ticket_closed_done: "{prefix}&aTicket #{id} wurde geschlossen."
+
+  vanish_enabled: "{prefix}&7Du bist jetzt &aVANISH&7."
+  vanish_disabled: "{prefix}&7Du bist jetzt wieder &cSICHTBAR&7."
+  vanish_enabled_other: "{prefix}&a{player} &7ist jetzt vanished."
+  vanish_disabled_other: "{prefix}&a{player} &7ist jetzt wieder sichtbar."
+  vanish_actionbar: "{prefix}&aVANISH &7aktiv"
+
 
   teamchat:
     enabled: "{prefix} &aTeam-Chat aktiviert."

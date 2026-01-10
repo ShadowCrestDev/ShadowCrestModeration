@@ -1,48 +1,79 @@
 language: en_US
 prefix: "&8[&5ShadowCrest&8] &r"
 
+# ======================
+# Mute
+# ======================
+mute:
+  blocked_commands:
+    - msg
+    - tell
+    - w
+    - whisper
+    - pm
+    - dm
+    - r
+    - reply
+    - me
+    - talk
+    - localchat
+
+# ======================
+# Join Log
+# ======================
 join_log:
   enabled: true
 
+# ======================
+# Playtime
+# ======================
+playtime:
+  enabled: true
+  show_in_join_log: true
+  format: "{days}d {hours}h {minutes}m"
+
+# ======================
+# Storage
+# ======================
+storage:
+  per_player_file: true
+  max_warn_list_on_join: 5
+  tickets_file: "tickets.yml"
+
+# ======================
+# Tickets
+# ======================
 tickets:
   enabled: true
   cooldown_seconds: 30
   max_open_per_player: 3
+
   reasons:
     - "Hacking"
     - "Duping"
     - "Griefing"
-    - "Beleidigung"
+    - "Insult"
     - "Bugusing"
-    - "Sonstiges"
+    - "Other"
+
   staff_close_reasons:
-    - "Erledigt"
-    - "Falschmeldung"
-    - "Keine Beweise"
-    - "Regeln erklärt"
+    - "Done"
+    - "False report"
+    - "No evidence"
+    - "Rules explained"
     - "Spam"
 
+# ======================
+# Warns / Auto punishments
+# ======================
 warn_settings:
-  # Wird NUR ausgelöst, wenn warns == <warns> erreicht wird (exakt).
-  # action: TEMPBAN oder BAN
+  # Triggered only when warns == <warns> is reached (exact match).
+  # action: TEMPBAN or BAN
   actions:
     - warns: 3
       action: TEMPBAN
       duration: "24h"
-      reason: "Zu viele Verwarnungen"
+      reason: "Too many warnings"
     - warns: 5
       action: BAN
-      reason: "Maximale Verwarnungen erreicht"
-  storage:
-      per_player_file: true
-      max_warn_list_on_join: 5
-      tickets_file: "tickets.yml"
-  playtime:
-      enabled: true
-      show_in_join_log: true
-      # Anzeigeformat (Platzhalter: {days} {hours} {minutes})
-      format: "{days}d {hours}h {minutes}m"
-
-
-
-
+      reason: "Maximum warnings reached"

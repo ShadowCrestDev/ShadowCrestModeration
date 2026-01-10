@@ -5,7 +5,7 @@
 
     <groupId>de.shadowcrest</groupId>
     <artifactId>shadowcrest-moderation</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <name>ShadowCrestModeration</name>
 
     <properties>

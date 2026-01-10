@@ -16,6 +16,20 @@ messages:
   warn_given: "{prefix}&e{player} &7has been warned. &7Reason: &f{reason} &8(&7Warns: &f{warns}&8)"
   warned_screen: "&cYou have been warned!\n&7Reason: &f{reason}\n&7Warns: &f{warns}"
 
+  mute_usage: "{prefix}&cUsage: /mute <player> [duration] [reason...]"
+  unmute_usage: "{prefix}&cUsage: /unmute <player>"
+
+  mute_default_reason: "Chat violation"
+  mute_time_permanent: "Permanent"
+
+  mute_done: "{prefix}&a{player} &7has been muted. &7Duration: &f{duration} &8| &7Reason: &f{reason}"
+  muted: "{prefix}&cYou are muted. &7Reason: &f{reason} &8| &7Remaining: &f{time}"
+  unmute_done: "{prefix}&a{player} &7has been unmuted."
+  unmute_not_muted: "{prefix}&e{player} &7is not muted."
+  unmuted_you: "{prefix}&aYou can chat again."
+  mute_actionbar: "&c🔇 You are muted &7| &f{time} &7| &7Reason: &f{reason}"
+
+
   kick_screen: "&cYou have been kicked by ShadowCrest!\n&7Reason: &f{reason}"
   ban_screen: "&cYou have been permanently banned by ShadowCrest!\n&7Reason: &f{reason}"
   tempban_screen: "&cYou have been banned by ShadowCrest!\n&7Duration: &f{duration}\n&7Reason: &f{reason}"
@@ -91,6 +105,12 @@ messages:
   staff_ticket_closed: "{prefix}&aTicket &f#{id} &ahas been closed by &f{staff}&a. &7Reason: &f{reason}"
   staff_ticket_not_exists: "{prefix}&cTicket no longer exists."
   staff_ticket_teleported: "{prefix}&aTeleported to &f{player}&a (Ticket #{id})"
+
+  vanish_enabled: "{prefix}&7You are now &aVANISHED&7."
+  vanish_disabled: "{prefix}&7You are now &cVISIBLE&7."
+  vanish_enabled_other: "{prefix}&a{player} &7is now vanished."
+  vanish_disabled_other: "{prefix}&a{player} &7is now visible."
+  vanish_actionbar: "{prefix}&aVANISH &7enabled"
 
   teamchat:
     enabled: "{prefix} &aTeam chat enabled."
