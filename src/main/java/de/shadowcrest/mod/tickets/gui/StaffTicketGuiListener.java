@@ -188,6 +188,19 @@ public class StaffTicketGuiListener implements Listener {
                     // Claim
                     t.claim(p.getUniqueId(), p.getName());
 
+                    // ✅ DISCORD WEBHOOK: Ticket claimed
+                    if (plugin.getConfig().getBoolean("discord.enabled", false)
+                            && plugin.getConfig().getBoolean("discord.events.tickets.claimed", true)) {
+
+                        String text = plugin.getLang().get("messages.discord.ticket_claimed", java.util.Map.of(
+                                "id", String.valueOf(t.getId()),
+                                "staff", p.getName()
+                        ));
+
+                        plugin.getDiscord().sendPlainAsync(text);
+                    }
+
+
                     String claimed = MessageUtil.format(
                             plugin,
                             "messages.staff_ticket_claimed",

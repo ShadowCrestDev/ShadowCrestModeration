@@ -36,15 +36,23 @@ public class UnmuteCommand implements CommandExecutor {
             return true;
         }
 
+        String playerName = (off.getName() == null ? args[0] : off.getName());
+        String staff = sender.getName();
+
         boolean removed = plugin.getMuteManager().unmute(off.getUniqueId());
         if (!removed) {
             sender.sendMessage(plugin.getLang().get("messages.unmute_not_muted",
-                    Map.of("player", off.getName() == null ? args[0] : off.getName())));
+                    Map.of("player", playerName)));
             return true;
         }
 
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().unmute(staff, playerName);
+        }
+
         sender.sendMessage(plugin.getLang().get("messages.unmute_done",
-                Map.of("player", off.getName() == null ? args[0] : off.getName())));
+                Map.of("player", playerName)));
 
         if (off.isOnline() && off.getPlayer() != null) {
             off.getPlayer().sendMessage(MessageUtil.msg(plugin, "messages.unmuted_you"));

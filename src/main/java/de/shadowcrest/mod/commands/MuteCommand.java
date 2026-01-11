@@ -78,12 +78,20 @@ public class MuteCommand implements CommandExecutor {
             durationText = args[1];
         }
 
-        plugin.getMuteManager().mute(off.getUniqueId(), off.getName() == null ? targetName : off.getName(), until, reason, sender.getName());
+        String finalName = (off.getName() == null ? targetName : off.getName());
+        String staff = sender.getName();
+
+        plugin.getMuteManager().mute(off.getUniqueId(), finalName, until, reason, staff);
+
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().mute(staff, finalName, durationText, reason);
+        }
 
         // notify sender
         sender.sendMessage(plugin.getLang().get("messages.mute_done",
                 Map.of(
-                        "player", off.getName() == null ? targetName : off.getName(),
+                        "player", finalName,
                         "duration", durationText,
                         "reason", reason
                 )

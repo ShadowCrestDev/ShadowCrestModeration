@@ -21,6 +21,8 @@ public class ShadowCrestMod extends JavaPlugin {
     private de.shadowcrest.mod.chat.TeamChatManager teamChatManager;
     private de.shadowcrest.mod.mute.MuteManager muteManager;
     private de.shadowcrest.mod.vanish.VanishManager vanishManager;
+    private de.shadowcrest.mod.discord.DiscordWebhookService discord;
+    private de.shadowcrest.mod.discord.ModerationNotifier modNotifier;
 
 
 
@@ -77,7 +79,7 @@ public class ShadowCrestMod extends JavaPlugin {
             for (var p : getServer().getOnlinePlayers()) {
 
                 var mm = getMuteManager();
-                if (mm == null) return;
+                if (mm == null) continue;
 
                 // nur wenn gemutet
                 if (!mm.isMuted(p.getUniqueId())) continue;
@@ -133,6 +135,10 @@ public class ShadowCrestMod extends JavaPlugin {
                 }
             }
         });
+//Discord
+        this.discord = new de.shadowcrest.mod.discord.DiscordWebhookService(this);
+        this.modNotifier = new de.shadowcrest.mod.discord.ModerationNotifier(this);
+
 
 
         // Commands
@@ -220,9 +226,17 @@ public class ShadowCrestMod extends JavaPlugin {
     public de.shadowcrest.mod.mute.MuteManager getMuteManager() {
         return muteManager;
     }
+
     public de.shadowcrest.mod.vanish.VanishManager getVanishManager() {
         return vanishManager;
     }
 
+    public de.shadowcrest.mod.discord.DiscordWebhookService getDiscord() {
+        return discord;
+    }
 
+    public de.shadowcrest.mod.discord.ModerationNotifier getModNotifier() {
+        return modNotifier;
+    }
 }
+

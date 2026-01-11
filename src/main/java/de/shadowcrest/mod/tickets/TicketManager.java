@@ -86,8 +86,23 @@ public class TicketManager {
         );
         MessageUtil.broadcastToStaff("shadowcrest.mod.ticket.notify", notify);
 
+        // ✅ DISCORD WEBHOOK: Ticket created
+        if (plugin.getConfig().getBoolean("discord.enabled", false)
+                && plugin.getConfig().getBoolean("discord.events.tickets.created", true)) {
+
+            String text = plugin.getLang().get("messages.discord.ticket_created", java.util.Map.of(
+                    "id", String.valueOf(t.getId()),
+                    "player", t.getCreatorName(),
+                    "target", (t.getTargetName() == null || t.getTargetName().isBlank()) ? "-" : t.getTargetName(),
+                    "category", String.valueOf(t.getReason())
+            ));
+
+            plugin.getDiscord().sendPlainAsync(text);
+        }
+
         return t;
     }
+
 
     public Ticket getTicket(int id) {
         return tickets.get(id);

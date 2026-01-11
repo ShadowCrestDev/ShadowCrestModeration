@@ -1,5 +1,30 @@
 language: en_US
 prefix: "&8[&5ShadowCrest&8] &r"
+discord:
+  enabled: false
+  # Important: Never post the webhook_url publicly.
+  webhook_url: ""
+  username: "ShadowCrestModeration"
+  avatar_url: ""
+  # optional: prefix for discord messages
+  prefix: "[SCM]"
+
+  events:
+    tickets:
+      created: true
+      claimed: true
+      closed: true
+    moderation:
+      warn: true
+      kick: true
+      ban: true
+      tempban: true
+      mute: true
+      unmute: true
+      unban: true
+    teamchat:
+      enabled: false
+
 
 # ======================
 # Mute

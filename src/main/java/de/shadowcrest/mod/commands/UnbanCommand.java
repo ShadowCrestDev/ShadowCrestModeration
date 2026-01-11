@@ -41,12 +41,19 @@ public class UnbanCommand implements CommandExecutor {
         banList.pardon(targetName);
 
         String staff = sender.getName();
+
+        // Staff notify (Minecraft)
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.unban",
                 MessageUtil.ph("staff", staff, "player", targetName)
         );
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
+
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().unban(staff, targetName);
+        }
 
         sender.sendMessage(MessageUtil.format(
                 plugin,

@@ -3,7 +3,9 @@ package de.shadowcrest.mod.commands;
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.util.MessageUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class KickCommand implements CommandExecutor {
@@ -35,6 +37,8 @@ public class KickCommand implements CommandExecutor {
         String reason = joinArgs(args, 1);
 
         String staff = sender.getName();
+
+        // ✅ Staff broadcast (ingame)
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.kick",
@@ -42,6 +46,12 @@ public class KickCommand implements CommandExecutor {
         );
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
 
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().kick(staff, target.getName(), reason);
+        }
+
+        // ✅ Kick screen
         String screen = MessageUtil.format(
                 plugin,
                 "messages.kick_screen",

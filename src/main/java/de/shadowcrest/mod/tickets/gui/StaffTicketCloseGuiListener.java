@@ -3,15 +3,12 @@ package de.shadowcrest.mod.tickets.gui;
 import de.shadowcrest.mod.ShadowCrestMod;
 import de.shadowcrest.mod.tickets.Ticket;
 import de.shadowcrest.mod.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.Bukkit;
-
-
-import java.util.Map;
 
 public class StaffTicketCloseGuiListener implements Listener {
 
@@ -36,7 +33,6 @@ public class StaffTicketCloseGuiListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
 
-        // Permission optional (falls du willst)
         if (!p.hasPermission("shadowcrest.mod.ticket.staff")) return;
 
         String title = e.getView().getTitle();
@@ -65,41 +61,60 @@ public class StaffTicketCloseGuiListener implements Listener {
         }
 
         // Close reasons (Slots 12-16, RED_DYE)
-        if (type == Material.RED_DYE) {
-            int ticketId = StaffTicketCloseGui.getTicketId(plugin, e.getCurrentItem());
-            String reason = StaffTicketCloseGui.getReason(plugin, e.getCurrentItem());
+        if (type != Material.RED_DYE) return;
 
-            if (ticketId <= 0 || reason == null || reason.isBlank()) return;
+        int ticketId = StaffTicketCloseGui.getTicketId(plugin, e.getCurrentItem());
+        String reason = StaffTicketCloseGui.getReason(plugin, e.getCurrentItem());
 
-            Ticket t = plugin.getTicketManager().getTicket(ticketId);
-            if (t == null) {
-                p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_exists"));
-                p.openInventory(StaffTicketGui.build(plugin, p, 1));
-                return;
-            }
+        if (ticketId <= 0 || reason == null || reason.isBlank()) return;
 
-            t.close(p.getName(), reason);
-            plugin.getTicketManager().save();
+        Ticket t = plugin.getTicketManager().getTicket(ticketId);
+        if (t == null) {
+            p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_not_exists"));
+            p.openInventory(StaffTicketGui.build(plugin, p, 1));
+            return;
+        }
 
-// ✅ Auto-Disable: Chat-Session schließen + Toggle-Modus aus
-            plugin.getTicketChatManager().closeSession(t.getId());
+        // ✅ Safety: nicht doppelt schließen
+        if (t.isClosed()) {
+            p.sendMessage(MessageUtil.msg(plugin, "messages.staff_ticket_already_closed"));
+            p.openInventory(StaffTicketGui.build(plugin, p, 1));
+            return;
+        }
 
-// ✅ Optional: Hinweis an beide, dass Chat-Modus beendet ist
-            plugin.getTicketChatManager().sendSessionClosed(p, t.getId());
+        t.close(p.getName(), reason);
+        plugin.getTicketManager().save();
 
-            var creator = Bukkit.getPlayer(t.getCreatorUuid());
-            if (creator != null) {
-                plugin.getTicketChatManager().sendSessionClosed(creator, t.getId());
-            }
+        // ✅ DISCORD WEBHOOK: Ticket closed
+        if (plugin.getConfig().getBoolean("discord.enabled", false)
+                && plugin.getConfig().getBoolean("discord.events.tickets.closed", true)) {
 
-            p.sendMessage(MessageUtil.format(
-                    plugin,
-                    "messages.staff_ticket_closed_done",
-                    MessageUtil.ph("id", t.getId())
+            String text = plugin.getLang().get("messages.discord.ticket_closed", java.util.Map.of(
+                    "id", String.valueOf(t.getId()),
+                    "staff", p.getName(),
+                    "reason", reason
             ));
 
-            p.openInventory(StaffTicketGui.build(plugin, p, 1));
-
+            plugin.getDiscord().sendPlainAsync(text);
         }
+
+        // ✅ Auto-Disable: Chat-Session schließen + Toggle-Modus aus
+        plugin.getTicketChatManager().closeSession(t.getId());
+
+        // ✅ Optional: Hinweis an beide, dass Chat-Modus beendet ist
+        plugin.getTicketChatManager().sendSessionClosed(p, t.getId());
+
+        var creator = Bukkit.getPlayer(t.getCreatorUuid());
+        if (creator != null) {
+            plugin.getTicketChatManager().sendSessionClosed(creator, t.getId());
+        }
+
+        p.sendMessage(MessageUtil.format(
+                plugin,
+                "messages.staff_ticket_closed_done",
+                MessageUtil.ph("id", t.getId())
+        ));
+
+        p.openInventory(StaffTicketGui.build(plugin, p, 1));
     }
 }

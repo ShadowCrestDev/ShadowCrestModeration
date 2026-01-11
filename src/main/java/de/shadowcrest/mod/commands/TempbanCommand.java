@@ -51,12 +51,19 @@ public class TempbanCommand implements CommandExecutor {
         Bukkit.getBanList(BanList.Type.NAME).addBan(targetName, reason, until, "ShadowCrest");
 
         String staff = sender.getName();
+
+        // Staff broadcast
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.tempban",
                 MessageUtil.ph("staff", staff, "player", targetName, "duration", durationStr, "reason", reason)
         );
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
+
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().tempban(staff, targetName, durationStr, reason);
+        }
 
         if (online != null) {
             String screen = MessageUtil.format(

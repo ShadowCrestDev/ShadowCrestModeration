@@ -58,6 +58,11 @@ public class WarnCommand implements CommandExecutor {
                 )
         );
 
+        // ✅ Discord webhook (Warn)
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().warn(staff, target.getName(), reason, warns);
+        }
+
         // Sender confirmation
         sender.sendMessage(
                 MessageUtil.format(
@@ -88,14 +93,12 @@ public class WarnCommand implements CommandExecutor {
         for (Object o : actions) {
             if (!(o instanceof Map<?, ?> map)) continue;
 
-            // warns trigger aus map lesen
             int trigger = 0;
             Object wObj = map.get("warns");
             if (wObj instanceof Number n) trigger = n.intValue();
 
             if (trigger != warns) continue;
 
-            // capture-safe
             Object actionObj = map.get("action");
             String action = (actionObj == null) ? "NONE" : String.valueOf(actionObj).toUpperCase();
 
@@ -109,7 +112,7 @@ public class WarnCommand implements CommandExecutor {
                         "messages.ban_screen",
                         MessageUtil.ph("reason", punishReason)
                 );
-                target.kick(MessageUtil.component(screen)); // ✅ Component
+                target.kick(MessageUtil.component(screen));
                 return;
             }
 
@@ -128,7 +131,7 @@ public class WarnCommand implements CommandExecutor {
                         "messages.tempban_screen",
                         MessageUtil.ph("duration", durationStr, "reason", punishReason)
                 );
-                target.kick(MessageUtil.component(screen)); // ✅ Component
+                target.kick(MessageUtil.component(screen));
                 return;
             }
 

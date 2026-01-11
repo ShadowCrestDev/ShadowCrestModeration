@@ -97,7 +97,6 @@ public final class StaffTicketDetailGui {
                     plugin.getLang().getStringList("messages.gui.staff_ticket_detail.button.claim.lore")
             ));
         }
-
         // Teleport (Slot 15)
         inv.setItem(15, item(
                 Material.ENDER_PEARL,

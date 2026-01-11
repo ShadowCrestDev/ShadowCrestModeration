@@ -35,6 +35,8 @@ public class BanCommand implements CommandExecutor {
         Bukkit.getBanList(BanList.Type.NAME).addBan(targetName, reason, null, "ShadowCrest");
 
         String staff = sender.getName();
+
+        // Staff broadcast
         String staffMessage = MessageUtil.format(
                 plugin,
                 "messages.staff_action.ban",
@@ -42,8 +44,18 @@ public class BanCommand implements CommandExecutor {
         );
         MessageUtil.broadcastToStaff("shadowcrest.mod.notify", staffMessage);
 
+        // ✅ Discord webhook
+        if (plugin.getModNotifier() != null) {
+            plugin.getModNotifier().ban(staff, targetName, reason);
+        }
+
+        // Kick if online
         if (online != null) {
-            String screen = MessageUtil.format(plugin, "messages.ban_screen", MessageUtil.ph("reason", reason));
+            String screen = MessageUtil.format(
+                    plugin,
+                    "messages.ban_screen",
+                    MessageUtil.ph("reason", reason)
+            );
             online.kick(MessageUtil.component(screen));
         }
 

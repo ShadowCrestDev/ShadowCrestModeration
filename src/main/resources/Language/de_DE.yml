@@ -13,6 +13,26 @@ messages:
   reload_done: "{prefix}&aConfig wurde neu geladen."
   scm_info: "{prefix}&7ShadowCrestModeration &fv{version}\n&7Author: &f{author}"
 
+  # Discord
+  discord_disabled: "{prefix}&cDiscord Webhook ist deaktiviert."
+  discord_webhook_missing: "{prefix}&cDiscord Webhook URL fehlt in der config.yml."
+
+  discord:
+    ticket_created: "{prefix} 🎫 Neues Ticket #{id} | Ersteller: {player} | Ziel: {target} | Kategorie: {category}"
+    ticket_claimed: "{prefix} ✅ Ticket #{id} übernommen von {staff}"
+    ticket_closed: "{prefix} 🔒 Ticket #{id} geschlossen von {staff} | Grund: {reason}"
+
+    mod_warn: "{prefix} ⚠️ WARN | {staff} -> {player} | {reason} ({warns})"
+    mod_kick: "{prefix} 👢 KICK | {staff} -> {player} | {reason}"
+    mod_ban: "{prefix} ⛔ BAN | {staff} -> {player} | {reason}"
+    mod_tempban: "{prefix} ⏳ TEMPBAN | {staff} -> {player} | {duration} | {reason}"
+    mod_mute: "{prefix} 🔇 MUTE | {staff} -> {player} | {duration} | {reason}"
+    mod_unmute: "{prefix} 🔊 UNMUTE | {staff} -> {player}"
+    mod_unban: "🟢 UNBAN | Staff: {staff} | Spieler: {player}"
+
+    teamchat: "{prefix} 🛡 STAFF | {player}: {message}"
+
+
   warn_given: "{prefix}&e{player} &7wurde gewarnt. &7Grund: &f{reason} &8(&7Warns: &f{warns}&8)"
   warned_screen: "&cDu wurdest verwarnt!\n&7Grund: &f{reason}\n&7Warns: &f{warns}"
 
