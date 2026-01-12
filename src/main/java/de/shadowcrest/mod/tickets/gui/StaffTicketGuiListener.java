@@ -232,11 +232,13 @@ public class StaffTicketGuiListener implements Listener {
             return;
         }
 
-        // Slot 14 = Actions
+// Slot 14 = Actions
         if (rawSlot == 14 && type == Material.ANVIL) {
+            plugin.getTicketContext().set(p.getUniqueId(), t.getId()); // ✅ Kontext setzen
             p.openInventory(StaffTicketActionsGui.build(plugin, t));
             return;
         }
+
 
         // Slot 16 = Close (öffnet Close-GUI)
         if (rawSlot == 16 && type == Material.RED_WOOL) {

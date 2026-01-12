@@ -103,7 +103,6 @@ public class TicketManager {
         return t;
     }
 
-
     public Ticket getTicket(int id) {
         return tickets.get(id);
     }
@@ -158,9 +157,17 @@ public class TicketManager {
 
                     Ticket t = new Ticket(id, createdAt, creatorUuid, creatorName, targetUuid, targetName, category, info);
 
+                    // ✅ Linked Actions laden
+                    List<String> actions = s.getStringList("linkedActions");
+                    if (actions != null && !actions.isEmpty()) {
+                        t.getLinkedActions().addAll(actions);
+                    }
+
                     // Status
                     String st = s.getString("status", "OPEN");
-                    try { t.setStatus(TicketStatus.valueOf(st)); } catch (Exception ignored) {}
+                    try {
+                        t.setStatus(TicketStatus.valueOf(st));
+                    } catch (Exception ignored) {}
 
                     // Claim-Daten
                     String claimedByUuidStr = s.getString("claimedByUuid", null);
@@ -227,6 +234,9 @@ public class TicketManager {
                 yml.set(path + ".closedAt", t.getClosedAt());
                 yml.set(path + ".closedByName", t.getClosedByName());
                 yml.set(path + ".closeReason", t.getCloseReason());
+
+                // ✅ Linked Actions speichern (WICHTIG: innerhalb der Schleife!)
+                yml.set(path + ".linkedActions", t.getLinkedActions());
             }
 
             yml.save(f);

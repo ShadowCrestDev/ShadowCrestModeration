@@ -23,6 +23,8 @@ public class ShadowCrestMod extends JavaPlugin {
     private de.shadowcrest.mod.vanish.VanishManager vanishManager;
     private de.shadowcrest.mod.discord.DiscordWebhookService discord;
     private de.shadowcrest.mod.discord.ModerationNotifier modNotifier;
+    private de.shadowcrest.mod.tickets.TicketContextManager ticketContext;
+    private de.shadowcrest.mod.tickets.TicketLinkService ticketLinkService;
 
 
 
@@ -139,6 +141,12 @@ public class ShadowCrestMod extends JavaPlugin {
         this.discord = new de.shadowcrest.mod.discord.DiscordWebhookService(this);
         this.modNotifier = new de.shadowcrest.mod.discord.ModerationNotifier(this);
 
+//Ticket Logging
+        this.ticketContext = new de.shadowcrest.mod.tickets.TicketContextManager();
+        this.ticketLinkService = new de.shadowcrest.mod.tickets.TicketLinkService(this);
+
+
+
 
 
         // Commands
@@ -238,5 +246,13 @@ public class ShadowCrestMod extends JavaPlugin {
     public de.shadowcrest.mod.discord.ModerationNotifier getModNotifier() {
         return modNotifier;
     }
+    public de.shadowcrest.mod.tickets.TicketContextManager getTicketContext() {
+        return ticketContext;
+    }
+
+    public de.shadowcrest.mod.tickets.TicketLinkService getTicketLinkService() {
+        return ticketLinkService;
+    }
+
 }
 

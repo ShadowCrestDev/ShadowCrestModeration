@@ -87,6 +87,15 @@ public class StaffTicketActionsGuiListener implements Listener {
             p.sendMessage(MessageUtil.msg(plugin, "messages.ticket_action_failed"));
             return;
         }
+// ✅ Ticket-Linked Moderation: Aktion ans Ticket hängen (nur wenn Kontext + target passt)
+        plugin.getTicketLinkService().logActionIfLinked(
+                p.getUniqueId(),
+                p.getName(),
+                action,
+                target,
+                duration,
+                reason
+        );
 
         p.sendMessage(MessageUtil.format(
                 plugin,

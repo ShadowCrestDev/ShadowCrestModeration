@@ -1,6 +1,9 @@
 package de.shadowcrest.mod.tickets;
 
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Ticket {
 
@@ -89,4 +92,16 @@ public class Ticket {
     public void setClosedAt(long closedAt) { this.closedAt = closedAt; }
     public void setClosedByName(String closedByName) { this.closedByName = closedByName; }
     public void setCloseReason(String closeReason) { this.closeReason = closeReason; }
+    // ✅ NEU: Aktionen die aus dem Ticket heraus gemacht wurden
+    private final List<String> linkedActions = new ArrayList<>();
+
+    public List<String> getLinkedActions() {
+        return linkedActions;
+    }
+
+    public void addLinkedAction(String line) {
+        if (line == null || line.isBlank()) return;
+        linkedActions.add(line);
+    }
+
 }

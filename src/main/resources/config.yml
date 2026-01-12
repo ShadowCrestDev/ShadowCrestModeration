@@ -14,6 +14,7 @@ discord:
       created: true
       claimed: true
       closed: true
+      actions: true
     moderation:
       warn: true
       kick: true

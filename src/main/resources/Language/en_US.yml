@@ -21,6 +21,8 @@ messages:
     ticket_created: "{prefix} 🎫 New Ticket #{id} | Creator: {player} | Target: {target} | Category: {category}"
     ticket_claimed: "{prefix} ✅ Ticket #{id} claimed by {staff}"
     ticket_closed: "{prefix} 🔒 Ticket #{id} closed by {staff} | Reason: {reason}"
+    ticket_action: "🎫 Ticket #{id}: {staff} executed {action} on {player} | duration: {duration} | reason: {reason}"
+
 
     mod_warn: "{prefix} ⚠️ WARN | {staff} -> {player} | {reason} ({warns})"
     mod_kick: "{prefix} 👢 KICK | {staff} -> {player} | {reason}"
@@ -99,6 +101,8 @@ messages:
   ticket_player_not_found_in_gui: "{prefix}&cPlayer not found (maybe offline)."
   ticket_cannot_report_self: "{prefix}&cYou cannot report yourself."
   ticket_target_unknown: "Unknown"
+  ticket_linked_action_line: "[Ticket #{id}] {action} by {staff} -> {player} | duration: {duration} | reason: {reason}"
+
 
   ticket_chat_claimed_supporter: "{prefix} &aTicket &e#{id} &ahas been claimed. Send with &e/t <msg>&a."
   ticket_chat_claimed_requester: "{prefix} &aYour ticket &e#{id} &ahas been accepted by &e{supporter}&a. Reply using &e/t <msg>&a."

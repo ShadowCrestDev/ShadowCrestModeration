@@ -29,6 +29,8 @@ messages:
     mod_mute: "{prefix} 🔇 MUTE | {staff} -> {player} | {duration} | {reason}"
     mod_unmute: "{prefix} 🔊 UNMUTE | {staff} -> {player}"
     mod_unban: "🟢 UNBAN | Staff: {staff} | Spieler: {player}"
+    ticket_action: "🎫 Ticket #{id}: {staff} hat {action} auf {player} ausgeführt | Dauer: {duration} | Grund: {reason}"
+
 
     teamchat: "{prefix} 🛡 STAFF | {player}: {message}"
 
@@ -99,6 +101,8 @@ messages:
   ticket_player_not_found_in_gui: "{prefix}&cSpieler nicht gefunden (vielleicht offline)."
   ticket_cannot_report_self: "{prefix}&cDu kannst dich nicht selbst reporten."
   ticket_target_unknown: "Unbekannt"
+  ticket_linked_action_line: "[Ticket #{id}] {action} von {staff} -> {player} | Dauer: {duration} | Grund: {reason}"
+
 
   ticket_chat_claimed_supporter: "{prefix} &aTicket &e#{id} &awurde geclaimt. Schreibe mit &e/t <msg>&a."
   ticket_chat_claimed_requester: "{prefix} &aDein Ticket &e#{id} &awurde von &e{supporter} &aangenommen. Antworte mit &e/t <msg>&a."
