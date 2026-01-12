@@ -81,6 +81,29 @@ It focuses on **clarity**, **performance**, and **staff efficiency**, featuring 
 
 ---
 
+### 🔗 Ticket-linked Moderation Log
+Every punishment executed from a ticket is automatically:
+- Linked to the ticket ID
+- Stored internally
+- Sent to Discord with full context:
+  - Staff
+  - Target
+  - Action
+  - Reason
+  - Duration
+  - Ticket ID
+
+ ---
+
+ ## 🌐 Discord Integration
+SCM includes a built-in Discord Webhook system:
+- Ticket created / claimed / closed
+- Moderation actions (warn, kick, ban, mute, etc.)
+- Fully configurable via `config.yml`
+- Fully translatable via language files
+
+This allows staff to monitor moderation activity live without being in-game.
+
 ## 📜 Commands
 
 ### General
@@ -147,9 +170,9 @@ It focuses on **clarity**, **performance**, and **staff efficiency**, featuring 
 ---
 
 ## 🔧 Compatibility
-- **Minecraft:** 1.19 – 1.21.x
+- **Minecraft:** 1.20 – 1.21.x
 - **Server:** Paper / Spigot
-- **Java:** 17+
+- **Java:** 21
 
 ---
 
